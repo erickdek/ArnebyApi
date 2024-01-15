@@ -8,6 +8,8 @@ import exphbs from 'express-handlebars';
 const app = express();
 const __dirname = path.resolve(); // Corregir la obtención de __dirname
 
+//Jordy Estuvo aqui :D
+
 // Configuración de la aplicación
 app.disable('x-powered-by'); // Deshabilitar el encabezado "X-Powered-By"
 app.use(morgan('dev')); // Usar Morgan para registrar las solicitudes HTTP
