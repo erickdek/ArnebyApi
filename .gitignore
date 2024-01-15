@@ -1,0 +1,33 @@
+# Node.js
+node_modules/
+npm-debug.log
+
+# Visual Studio Code
+.vscode/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Google Drive
+*.gdrive
+
+# Astro
+public/build/
+
+# Express
+.env
+
+# Handlebars
+views/cache/
+
+# Redis
+dump.rdb
+
+# Caches
+.cache/
+
+# Logs
+*.log
+logs/
+log.txt
