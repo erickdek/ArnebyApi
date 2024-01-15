@@ -1,0 +1,33 @@
+<div class="loginform">
+    <h2 class="sub-hero">Nueva App</h2>
+    <form name="app-create" id="form-app-create">
+        <div class="field">
+            <label for="name">Nombre de la aplicación: </label>
+            <input type="text" name="name" placeholder="Mi Web" id="name" required />
+        </div>
+        <div class="field">
+            <label for="apptype">Tipo de aplicación: </label>
+            <select name="apptype" id="apptype" required>
+                <option value="blog">Blog</option>
+                <option value="store">Tienda</option>
+                <option value="newspaper">Periódico</option>
+                <option value="service">Servicio</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="domain">Dominio (URL): </label>
+            <input type="url" name="domain" placeholder="https://miweb.com" id="domain" required />
+        </div>
+        <div class="field">
+            <label for="resume">Resumen (máximo 250 caracteres): </label>
+            <textarea cols="40" rows="5" name="resume" placeholder="Escribe de que trata tu web, y en que se diferencia del resto..." id="resume" required></textarea>
+            <p id="char-count">0/250</p>
+        </div>
+        <div class="field">
+            <input class="btn-dark-outline" type="submit" value="Crear Aplicación" />
+        </div>
+    </form>
+    <p id="app_notice"></p>
+    
+    <p><a target="_self" href="/panel">< Cancelar</a></p>
+</div>

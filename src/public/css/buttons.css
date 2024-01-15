@@ -1,0 +1,36 @@
+.btn-dark {
+    font-family: 'Bricolage';
+    border: 2px solid;
+    border-radius: 10px;
+    border-color: var(--brand-black);
+    color: var(--brand-white);
+    background: var(--brand-black);
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+.btn-dark:hover {
+    background: var(--brand-black-hov);
+    text-decoration: none;
+}
+
+.btn-dark-outline {
+    font-family: 'Bricolage';
+    border: 2px solid;
+    border-radius: 10px;
+    border-color: var(--brand-black);
+    color: var(--brand-black);
+    background-color: transparent;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+.btn-dark-outline:hover {
+    color: var(--white) !important;
+    background: var(--brand-black);
+    text-decoration: none;
+}

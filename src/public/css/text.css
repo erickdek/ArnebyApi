@@ -1,0 +1,24 @@
+.txt-big {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+}
+.txt-acenter {
+    text-align: center;
+}
+
+.txt-cwhite {
+    color: var(--white) !important;
+}
+
+.txt-currency{
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 15px;
+}
+
+.txt-price{
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 30px;
+}

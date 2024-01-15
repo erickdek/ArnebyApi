@@ -1,0 +1,131 @@
+/* Estilos de reinicio (normalize.css o tu propio reset) */
+@import 'normalize.css';
+@import 'buttons.css';
+@import 'components.css';
+@import 'header.css';
+@import 'text.css';
+@import 'utils.css';
+
+@font-face {
+    font-family: 'Bricolage';
+    src: url('/fonts/bricolage/BricolageGrotesque-VariableFont.woff2') format('woff2'),
+         url('/fonts/bricolage/BricolageGrotesque-VariableFont.ttf') format('truetype');
+    font-weight: 1 1000;
+    font-stretch: 1 100%;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Urbanist';
+    src: url('/fonts/urbanist/Urbanist-VariableFont_wght.woff2') format('woff2'),
+         url('/fonts/urbanist/Urbanist-VariableFont_wght.ttf') format('truetype');
+    font-weight: 1 1000;
+    font-stretch: 1 100%;
+    font-style: normal;
+}
+
+:root {
+    --brand-gray: #B7AD99;
+    --brand-black: #030301;
+    --brand-black-hov: #272712;
+    --brand-red: #FF4365;
+    --brand-blue: #0dbba7;
+    --brand-white: #FFFFF3;
+    --white: #ffff;
+    --gray1: #e7e7e7;
+    --gray2: #878787;
+    --gray3: #676767;
+    --gray4: #525252;
+    --font: #333333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Bricolage';
+}
+
+body {
+    font-family: 'Urbanist', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+}
+
+body {
+    background-color: var(--white);
+    color: var(--font);
+    width: 100%;
+    align-self: center;
+    min-height: 100vh
+}
+
+div {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+h1, h2, h3, h4 ,h5, h6, span, p { margin: 0;}
+
+a {
+    color: var(--brand-red);
+}
+header {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px;
+    align-items: center;
+}
+
+main {
+    padding: 15px;
+}
+
+footer {
+    box-sizing: border-box;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 15px;
+    justify-content: end;
+}
+
+section {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1280px;
+}
+
+form {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+label {
+    font-size: 16px;
+}
+
+input, select, textarea {
+    border-radius: 10px;
+    border: 1px solid var(--gray2);
+    padding: 10px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    min-height: 100vh;
+}
+
+cw {
+    color: var(--brand-red);
+}
