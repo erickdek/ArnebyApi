@@ -4,7 +4,7 @@ import SwaggerUI from 'swagger-ui-express';
 //Info about the Api
 const apiOptions = {
     definition: {
-        openapi: "3.0.0",
+        openapi: "3.0.1",
         info: {title: "Arneby API", version: "1.0.0"}
     },
     apis: ['src/routes/api/v1/index.js']
