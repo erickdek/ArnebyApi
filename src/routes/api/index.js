@@ -10,8 +10,4 @@ apiRoutes
     .get('/', (req, res) => {res.status(200).json(new JsonR(200, true, 'app', 'Welcome to Arneby API', {}))})
     .use('/v1', v1Route)
 
-    
-    //404
-    .use((req, res) => {res.status(404).json(new JsonR(404, false, 'app', 'Endpoint not found', {}))});
-
 export default apiRoutes;

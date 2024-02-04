@@ -6,6 +6,6 @@ export const AppRoute = Router();
 AppRoute
     .get('/', authRequired, GetApp)
     .post('/', authRequired, setApp)
-    .get('/:idApp', authRequired, GetAppId)
+    .get('/:id', authRequired, GetAppId)
     .put('/:idApp', authRequired, putApp)
     .delete('/:idApp', authRequired, delApp);

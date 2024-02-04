@@ -14,9 +14,7 @@ const v1Routes = Router();
 v1Routes
     //Acceder a informacion admin
     .use('/admin', authRequired, authRequiredAdmin)
-    //Post
-    .use('/post', PostRoutes )
-    //App - Usuario, Asistencia, 
+    //App - Usuario, Asistencia 
     .use('/app', AppRoute )
     //Autorizacion - login y register
     .use('/auth', userRoute )

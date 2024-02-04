@@ -1,38 +1,29 @@
-import App from '../schemas/db/appSchema.js'
+import Event from '../schemas/db/eventSchema.js'
 import crypto from 'node:crypto';
 import JsonR from '../models/jsonModel.js'
 
 class eventModel{
-    static async check({appid, secretkey}){
-        try {
-            const AppFind = await App.findOne({ appid, secretkey, appban: false });
-            if (!AppFind) {
-                return new JsonR(404, false, 'app-model-check', 'App not found', {});
-            }
-
-            return new JsonR(200, true, 'app-model-check', 'App found successfully', {
-                id: AppFind._id,
-                name: AppFind.name,
-                domain: AppFind.domain,
-                apptype: AppFind.apptype,
-                resume: AppFind.resume,
-
-            });
-        } catch (err) {
-            return new JsonR(500, false, 'app-model-check', 'Server error', {});
-        }
-    }
 
     /**
      * Ingresa un evento en mongodb.
      * @param {String} title - Titulo del evento.
-     * @param {number} content - .
+     * @param {String} slug - Slug con guiones para el evento.
+     * @param {number} content - Contenido del evento Descripción
+     * @param {number} longitude - Longitud de la ubicacion del evento
+     * @param {number} latitude - Latitud de la ubicacion del evento
+     * @param {String} country - Pais del evento
+     * @param {String} province - Provincia/Estado/Region del evento
+     * @param {String} address - Direccion del evento
+     * @param {Boolean} virtual - Es virtual el evento true o false
+     * @param {Array} links - Array de links [titulo, url]
+     * @param {
      * @returns {Object} JsonR con todo el resultado final.
      */
-    static async set({title, content, longitude, latitude, country, province, address, virtual, links, prices, organizer, coorganizers, registeredUsers, startDate, endDate, photos, featuredImage}){
+    static async set({title, slug, content, longitude, latitude, country, province, address, virtual, links, prices, organizer, startDate, endDate, featuredImage}){
         try {
-            const newEvent = new App({
+            const newEvent = new Event({
                 title: title,
+                slug: slug,
                 content: content,
                 location: {
                     longitude: longitude,
@@ -45,11 +36,8 @@ class eventModel{
                 links: links,
                 prices: prices,
                 organizer: organizer,
-                coorganizers: coorganizers,
-                registeredUsers: registeredUsers,
                 startDate: startDate,
                 endDate: endDate,
-                photos: photos,
                 featuredImage: featuredImage,
             })
 
@@ -60,14 +48,130 @@ class eventModel{
         }
     }
 
-    static async get({ userid }){
+    /**
+     *  Add new short Event with little data.
+     * @param {String} linkTitle - event link title: whatsapp, meetup, facebook group.
+     * @param {String} linkURL - event link url: https://example.com.
+    * @returns {Object} JsonR with the data/errors.
+    */
+    static async addOneLink({eventId, linkTitle, linkURL}){
         try {
-            const AppFind = await App.find({
-                userid: userid,
-            })
-            if(!AppFind) return new JsonR(404, false, 'app-model-get', 'App not found', {});
+            //Get the event by the _id
+            const EventFind = await Event.findById(eventId);
+
+            //Check if the event exists
+            if (!EventFind) {
+                return new JsonR(404, false, 'event-model-addOneLink', 'Event not found', {});
+            }
+
+            // Add a new link in the event
+            EventFind.links.push({ title: linkTitle, url: linkURL });
+
+            // Save the event in the database
+            const saveEvnt = await EventFind.save();
+
+            return new JsonR(200, true, 'event-model-addOneLink', 'Event add link successfully', saveEvnt);
+        } catch (err) {
+            return new JsonR(500, false, 'app-model-set', 'Server error', {});
+        }
+    }
+
+    /**
+     *  Add One link to the event.
+     * @param {ObjectId} eventId - Id del evento
+     * @param {String} linkTitle - event link title: whatsapp, meetup, facebook group.
+     * @param {String} linkURL - event link url: https://example.com.
+    * @returns {Object} JsonR with the data/errors.
+    */
+    static async addOneLink({eventId, linkTitle, linkURL}){
+        try {
+            //Get the event by the _id
+            const EventFind = await Event.findById(eventId);
+
+            //Check if the event exists
+            if (!EventFind) {
+                return new JsonR(404, false, 'event-model-addOneLink', 'Event not found', {});
+            }
+
+            // Add a new link in the event
+            EventFind.links.push({ title: linkTitle, url: linkURL });
+
+            // Save the event in the database
+            const saveEvnt = await EventFind.save();
+
+            return new JsonR(200, true, 'event-model-addOneLink', 'Event add link successfully', saveEvnt);
+        } catch (err) {
+            return new JsonR(500, false, 'app-model-set', 'Server error', {});
+        }
+    }
+
+    /**
+     * Add links to the event.
+     * @param {ObjectId} eventId - Id del evento
+     * @param {Array} links - Array of links [{ title: "whatsapp", url: "https://example.com" }, ...]
+     * @returns {Object} JsonR with the data/errors.
+     */
+    static async addLinks({ eventId, links }) {
+        try {
+        // Obtiene el evento por el _id
+        const event = await Event.findById(eventId);
     
-            return new JsonR(200,true,'app-model-get','App found successfully', AppFind);
+        // Verifica si el evento existe
+        if (!event) {
+            return new JsonR(404, false, 'event-model-addLinks', 'Event not found', {});
+        }
+    
+        // Agrega los nuevos enlaces al array de links
+        event.links.push(...links);
+    
+        // Guarda el evento actualizado en la base de datos
+        const saveEvent = await event.save();
+    
+        return new JsonR(200, true, 'event-model-addLinks', 'Event add links successfully', saveEvent);
+        } catch (err) {
+        return new JsonR(500, false, 'app-model-set', 'Server error', {});
+        }
+    }
+
+    /**
+     * Replace existing links with new links in the event.
+     * @param {ObjectId} eventId - Id del evento
+     * @param {Array} links - Array of links [{ title: "whatsapp", url: "https://example.com" }, ...]
+     * @returns {Object} JsonR with the data/errors.
+     */
+    static async replaceLinks({ eventId, links }) {
+        try {
+        // Obtiene el evento por el _id
+        const event = await Event.findById(eventId);
+    
+        // Verifica si el evento existe
+        if (!event) {
+            return new JsonR(404, false, 'event-model-replaceLinks', 'Event not found', {});
+        }
+    
+        // Reemplaza los enlaces existentes con los nuevos enlaces
+        event.links = links;
+    
+        // Guarda el evento actualizado en la base de datos
+        const saveEvent = await event.save();
+    
+        return new JsonR(200, true, 'event-model-replaceLinks', 'Event links replaced successfully', saveEvent);
+        } catch (err) {
+        return new JsonR(500, false, 'app-model-set', 'Server error', {});
+        }
+    }
+
+    /**
+     * Get a event with the ID.
+     * @param {ObjectId} eventId - eventid
+    * @returns {Object} JsonR with the data/errors.
+    */
+    static async get({ eventid }){
+        try {
+            const EventFind = await Event.findById(eventid);
+            if(!EventFind) return new JsonR(404, false, 'app-model-get', 'App not found', {});
+    
+            return new JsonR(200,true,'app-model-get','App found successfully', EventFind);
         } catch (err) {
             return new JsonR(500, false, 'app-model-set', 'Server error', {});
         }

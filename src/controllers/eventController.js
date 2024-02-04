@@ -3,7 +3,6 @@ import App from '../models/appModel.js'
 import JsonR from '../models/jsonModel.js'
 
 export const GetEvent = async (req, res) => {
-    
     return res.status(404).json(new JsonR(404, false, 'app-controller-getapp', 'App not found', {}));
 };
 
@@ -34,7 +33,6 @@ export const setEvent = async (req, res) => {
 };
 
 export const putEvent = async (req, res) => {
-    
     return res.status(404).json(new JsonR(404, false, 'app-controller-putapp', 'App not found', {}));
 };
 
