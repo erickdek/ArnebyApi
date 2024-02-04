@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import JsonR from '../../../models/jsonModel.js'
 //ROUTES
-import { PostRoutes } from "./postRoute.js";
 import { userRoute } from "./userRoute.js";
 import { AppRoute } from "./appRoute.js";
 import { EventRoute } from "./eventRoute.js";
