@@ -2,6 +2,18 @@ import mongoose from 'mongoose';
 
 //MONGODB
 const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true
+    },
+    lastname: {
+        type: String,
+        required: false,
+        trim: true,
+        unique: true
+    },
     username: {
         type: String,
         required: true,

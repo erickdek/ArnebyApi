@@ -1,9 +1,12 @@
 import { object, string } from 'zod'
 
-//ZOD
+//ZOD - Register
 const userValidation = object({
-    username: string({
-        required_error: 'username is required'
+    name: string({
+        required_error: 'name is required'
+    }).min(5).max(25),
+    lastname: string({
+        required_error: 'lastname is required'
     }).min(5).max(25),
     email: string({
         required_error: 'email is required'
@@ -19,7 +22,7 @@ const userValidation = object({
 })
 
 
-//ZOD
+//ZOD - Login
 const userLoginValidation = object({
     email: string({
         required_error: 'email is required'
