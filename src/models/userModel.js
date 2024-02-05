@@ -7,12 +7,13 @@ import JsonR from '../models/jsonModel.js'
 import { createAccessToken } from '../services/jwt.js'
 
 class UserModel{
-    static async set({ username, email, password }){
+    static async set({ name, lastname, email, password }){
         try {
             const passwordhash = await bcryptjs.hash(password, 10)
 
             const newUser = new UserDB({
-                username,
+                name,
+                lastname,
                 email,
                 password: passwordhash
             });
@@ -21,7 +22,8 @@ class UserModel{
             return new JsonR(200, true, 'auth-controller-login', 'Register Success', {
                 token: token,
                 id: saveUser._id,
-                username: newUser.username, 
+                name: newUser.name,
+                lastname: newUser.lastname,
                 email: newUser.email
             })
         } catch (err){
