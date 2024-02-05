@@ -177,6 +177,42 @@ class eventModel{
         }
     }
 
+    /**
+     * Get all events with pagination.
+     * @param {number} eventsPerPage - Number of events per page.
+     * @param {number} page - Page number.
+     * @returns {Object} JsonR with the data/errors.
+     */
+    static async getAll({ eventsPerPage, page }) {
+        try {
+        const pageNumber = parseInt(page, 10) || 1;
+        const pageSize = parseInt(eventsPerPage, 10) || 10; // Puedes ajustar el tamaño de la página según tus necesidades
+    
+        const events = await Event.find()
+            .skip((pageNumber - 1) * pageSize)
+            .limit(pageSize)
+            .exec();
+    
+        const totalEvents = await Event.countDocuments();
+        const totalPages = Math.ceil(totalEvents / pageSize);
+    
+        const result = {
+            events,
+            pageInfo: {
+            totalEvents,
+            totalPages,
+            currentPage: pageNumber,
+            eventsPerPage: pageSize,
+            },
+        };
+    
+        return new JsonR(200, true, 'app-model-getAll', 'Events found successfully', result);
+        } catch (err) {
+        console.error(err);
+        return new JsonR(500, false, 'app-model-getAll', 'Server error', {});
+        }
+    }
+
     static async delete({ userid, id }) {
         try {
             const AppFind = await App.findOneAndDelete({ _id: id, userid: userid });

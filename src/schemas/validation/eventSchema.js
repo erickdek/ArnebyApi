@@ -1,23 +1,37 @@
-import { object, string } from 'zod'
+import { object, date, string, number, boolean, array } from 'zod'
 
 //ZOD
 const eventValidation = object({
-    title: string({
-        required_error: 'title is required'
-    }).min(5).max(150),
-    email: string({
-        required_error: 'email is required'
-    }).refine((value) => {
-        // Utiliza una expresión regular para validar si el valor es una dirección de correo electrónico válida
-        return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value);
-    }, {
-        message: 'Invalid email address',
+    title: string().min(1),
+    slug: string().min(1),
+    content: string().min(1),
+    location: object({
+      longitude: number(),
+      latitude: number(),
+      country: string().min(1),
+      province: string().min(1),
+      address: string().min(1),
     }),
-    password: string({
-        required_error: 'password is required'
-    }).min(7)
-})
+    virtual: boolean(),
+    links: array(
+      object({
+        title: string().min(1),
+        url: string().min(1),
+      })
+    ),
+    prices: array(
+      object({
+        plan: string().min(1),
+        benefits: array(string()),
+        price: number(),
+      })
+    ),
+    organizer: string(), // Puedes ajustar según el tipo de datos de tu organizador
+    startDate: date(),
+    endDate: date(),
+    featuredImage: string(), // Puedes ajustar según el tipo de datos de tu imagen destacada
+  });
 
-export function checkUser(obj){
-    return userValidation.safeParse(obj)
+export function checkEvent(obj){
+    return eventValidation.safeParse(obj)
 }
