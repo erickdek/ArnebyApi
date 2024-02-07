@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'user'
+    },
+    avatar: {
+        type: String,
+        required: true,
+        default: 'https://s3.us-central-1.wasabisys.com/src.arneby.com/web/avatar.svg',
+        trim: true
     }
 }, {
     timestamps: true

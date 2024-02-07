@@ -17,12 +17,13 @@ export const login = async (req, res) => {
         
         //En caso de que no exista el usuario
         if (!loginUser.success){
-            return res.status(400).json(loginUser);
+            return res.status(loginUser.status).json(loginUser);
         }
         //Devolvemos token del usuario
-        return res.cookie("token", loginUser.data.token).status(200).json(loginUser);
+        return res.cookie("token", loginUser.data.token).status(loginUser.status).json(loginUser);
     
     } catch (e) {
+        logger.error(e.message);
         return res.status(500).json(new JsonR(500, false, 'auth-controller-login', 'Server error', {}));
     }
 };

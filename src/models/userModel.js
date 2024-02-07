@@ -1,6 +1,5 @@
 import UserDB from '../schemas/db/userSchema.js'
-import AppsDB from '../schemas/db/appSchema.js'
-import PostDB from '../schemas/db/postSchema.js'
+import EventDB from '../schemas/db/eventSchema.js'
 import bcryptjs from 'bcryptjs'
 import JsonR from '../models/jsonModel.js'
 
@@ -38,8 +37,8 @@ class UserModel{
         return new JsonR(200, true, 'user-model-check', 'Login successful', {
             token: token, 
             id: userFound._id, 
-            name: newUser.name,
-            lastname: newUser.lastname, 
+            name: userFound.name,
+            lastname: userFound.lastname, 
             email: userFound.email
         });
     }
@@ -50,10 +49,10 @@ class UserModel{
         if (!userFound) return new JsonR(404, false, 'user-model-check', 'User not found', {});
     
         // Obtener el total de aplicaciones del usuario
-        const totalApps = await AppsDB.countDocuments({ userid: userFound._id });
+        const totalEvents = await EventDB.countDocuments({ organizer: userFound._id });
         
-        const userApps = await AppsDB.find({ userid: userFound._id })
-        .select('name apptype appid updatedAt domain') // Selecciona los campos deseados
+        const userEvents = await EventDB.find({ organizer: userFound._id })
+        .select('title slug content location updatedAt') // Selecciona los campos deseados
         .sort({ updatedAt: -1 });
 
         return new JsonR(200, true, 'user-model-get', 'Authorization successful', {
@@ -63,8 +62,13 @@ class UserModel{
                 lastname: newUser.lastname,
                 email: userFound.email,
                 role: userFound.role,
+                avatar: userFound.avatar,
                 created_at: userFound.createdAt,
-                updated_at: userFound.updatedAt
+                updated_at: userFound.updatedAt,
+            },
+            events: {
+                numTotal: totalEvents,
+                userEvents
             }
         });
     }
