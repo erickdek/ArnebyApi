@@ -8,32 +8,23 @@ import { createAccessToken } from '../services/jwt.js'
 
 class UserModel{
     static async set({ name, lastname, email, password }){
-        try {
-            const passwordhash = await bcryptjs.hash(password, 10)
-
-            const newUser = new UserDB({
-                name,
-                lastname,
-                email,
-                password: passwordhash
-            });
-            const saveUser = await newUser.save();
-            const token = await createAccessToken({id: saveUser._id});
-            return new JsonR(200, true, 'auth-controller-login', 'Register Success', {
-                token: token,
-                id: saveUser._id,
-                name: newUser.name,
-                lastname: newUser.lastname,
-                email: newUser.email
-            })
-        } catch (err){
-            if (err.code === 11000) {
-                // Error de duplicación de clave, probablemente debido al correo electrónico duplicado
-                return new JsonR(400, false, 'user-model-set', 'Email o username already exists', {});
-            } else {
-                return new JsonR(500, false, 'user-model-set', 'Internal Server Error', {});
-            }
-        }
+        const passwordhash = await bcryptjs.hash(password, 10);
+        
+        const newUser = new UserDB({
+            name,
+            lastname,
+            email,
+            password: passwordhash
+        });
+        const saveUser = await newUser.save();
+        const token = await createAccessToken({id: saveUser._id});
+        return new JsonR(200, true, 'auth-controller-login', 'Register Success', {
+            token: token,
+            id: saveUser._id,
+            name: newUser.name,
+            lastname: newUser.lastname,
+            email: newUser.email
+        })
     }
 
     static async check({email, password }){

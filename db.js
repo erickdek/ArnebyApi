@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 
-const {APP_MONGODB_HOST, APP_MONGODB_DATABASE} = process.env;
-const MONGODB_URI = `mongodb+srv://${APP_MONGODB_HOST}/${APP_MONGODB_DATABASE}`;
+const {APP_MONGODB_HOST, APP_MONGODB_DATABASE, APP_MONGODB_SERVER} = process.env;
+const MONGODB_URI = `${APP_MONGODB_SERVER}://${APP_MONGODB_HOST}/${APP_MONGODB_DATABASE}`;
+
 
 const dbConnect = async () => {
     try {

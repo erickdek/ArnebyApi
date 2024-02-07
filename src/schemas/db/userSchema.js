@@ -5,20 +5,12 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        trim: true,
-        unique: true
+        trim: true
     },
     lastname: {
         type: String,
         required: false,
-        trim: true,
-        unique: true
-    },
-    username: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true
+        trim: true
     },
     email: { 
         type: String,
@@ -29,18 +21,6 @@ const userSchema = new mongoose.Schema({
     password: { 
         type: String,
         required: true
-    },
-    credits: {
-        type: Number,
-        required: true,
-        default: 0,
-        min: 0
-    },
-    balance: {
-        type: Number,
-        required: true,
-        default: 0,
-        min: 0
     },
     role: {
         type: String,

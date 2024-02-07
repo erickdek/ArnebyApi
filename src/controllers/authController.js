@@ -9,10 +9,11 @@ export const login = async (req, res) => {
     if(!result.success){
         return res.status(400).json(new JsonR(400, false, 'auth-controller-login', 'Error consulta', JSON.parse(result.error.message)))
     }
-
+    
     //Consulta del usuario en la base de datos
     try {
         const loginUser = await User.check(req.body);
+        
         //En caso de que no exista el usuario
         if (!loginUser.success){
             return res.status(400).json(loginUser);
@@ -21,7 +22,7 @@ export const login = async (req, res) => {
         return res.cookie("token", loginUser.data.token).status(200).json(loginUser);
     
     } catch (e) {
-        return res.status(500).json(new JsonR(400, false, 'auth-controller-login', 'Server error', {}));
+        return res.status(500).json(new JsonR(500, false, 'auth-controller-login', 'Server error', {}));
     }
 };
 
@@ -35,7 +36,7 @@ export const register = async (req, res) => {
 
     //Registro del usuario en la base de datos
     try {
-        const newUser = await User.set(req.body)
+        const newUser = await User.set(req.body);
         //En caso de que no exista el usuario
         if(!newUser.success){
             return res.status(400).json(new JsonR(400, false, 'auth-controller-register', JSON.parse(newUser.message), {}));
@@ -43,7 +44,11 @@ export const register = async (req, res) => {
         //Devolvemos token del usuario
         return res.cookie("token", newUser.data.token).status(200).json(newUser);
     } catch (e) {
-        return res.status(500).json(new JsonR(400, false, 'auth-controller-register', 'Server error', {}));
+        if (e.code === 11000 && e.keyPattern.email) {
+            // El correo electrónico ya está en uso
+            return res.status(409).json(new JsonR(409, false, 'auth-controller-register', 'Email already exists', {}));
+        }
+        return res.status(500).json(new JsonR(500, false, 'auth-controller-register', 'Server error', {}));
     }
 };
 
