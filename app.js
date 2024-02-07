@@ -4,14 +4,22 @@ import path from 'path';
 import Routes from './src/routes/index.js';
 import cookieParser from 'cookie-parser';
 import exphbs from 'express-handlebars';
+import cors from "cors";
 
 const app = express();
 const __dirname = path.resolve(); // Corregir la obtención de __dirname
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
 //Jordy Estuvo aqui :D
 
 // Configuración de la aplicación
 app.disable('x-powered-by'); // Deshabilitar el encabezado "X-Powered-By"
+
+app.use(cors({
+    origin: [FRONTEND_URL,'http://localhost', 'https://arneby.com'],
+    credentials: true, // Si se requieren credenciales (como cookies)
+}));
+
 app.use(morgan('dev')); // Usar Morgan para registrar las solicitudes HTTP
 app.use(cookieParser()); // Usar Cookie Parser para trabajar con cookies
 
