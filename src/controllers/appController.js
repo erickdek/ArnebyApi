@@ -1,3 +1,4 @@
+import logger from '../../logger.js';
 import { checkAppGen } from '../schemas/validation/appSchema.js';
 import App from '../models/appModel.js'
 import JsonR from '../models/jsonModel.js'

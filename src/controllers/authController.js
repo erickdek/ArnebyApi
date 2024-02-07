@@ -1,3 +1,4 @@
+import logger from '../../logger.js';
 import User from '../models/userModel.js'
 import JsonR from '../models/jsonModel.js'
 import { checkUser, checkUserLogin } from '../schemas/validation/userSchema.js'
@@ -48,7 +49,7 @@ export const register = async (req, res) => {
             // El correo electrónico ya está en uso
             return res.status(409).json(new JsonR(409, false, 'auth-controller-register', 'Email already exists', {}));
         }
-        console.log(e);
+        logger.error('Error: ' + e.message);
         return res.status(500).json(new JsonR(500, false, 'auth-controller-register', 'Server error', {}));
     }
 };
