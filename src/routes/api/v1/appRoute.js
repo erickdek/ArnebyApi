@@ -4,8 +4,8 @@ import { authRequired } from '../../../middlewares/validateToken.js';
 export const AppRoute = Router();
 
 AppRoute
-    .get('/', authRequired, GetApp)
-    .post('/', authRequired, setApp)
-    .get('/:id', authRequired, GetAppId)
-    .put('/:idApp', authRequired, putApp)
-    .delete('/:idApp', authRequired, delApp);
+    .get('/', authRequired )
+    .post('/', authRequired )
+    .get('/:id', authRequired )
+    .put('/:idApp', authRequired )
+    .delete('/:idApp', authRequired );
