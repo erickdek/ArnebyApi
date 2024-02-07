@@ -3,6 +3,7 @@ import app from './app.js';
 import cors from "cors";
 import { app404 as endPoint404 } from './src/routes/404.js';
 import { swaggerDocs as v1Swagger } from "./src/routes/api/v1/swagger.js";
+import logger from './logger.js';
 
 const PORT = process.env.PORT ?? 3000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
@@ -15,7 +16,7 @@ app.use(
 );
 dbConnect();
 app.listen(PORT, (req, res) => {
-    console.log(`Server listening on port ${PORT}`);
+    logger.info(`Server listening on port ${PORT}`);
     v1Swagger(app, PORT);
 
     //Error 404 ninguna ruta concuerda
