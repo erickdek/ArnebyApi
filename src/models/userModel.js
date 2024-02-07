@@ -38,7 +38,8 @@ class UserModel{
         return new JsonR(200, true, 'user-model-check', 'Login successful', {
             token: token, 
             id: userFound._id, 
-            username: userFound.username, 
+            name: newUser.name,
+            lastname: newUser.lastname, 
             email: userFound.email
         });
     }
@@ -50,11 +51,6 @@ class UserModel{
     
         // Obtener el total de aplicaciones del usuario
         const totalApps = await AppsDB.countDocuments({ userid: userFound._id });
-    
-        // Obtener el total de publicaciones del usuario
-        const totalPosts = await PostDB.countDocuments({ userid: userFound._id });
-    
-        // Obtener todas las aplicaciones creadas por el usuario
         
         const userApps = await AppsDB.find({ userid: userFound._id })
         .select('name apptype appid updatedAt domain') // Selecciona los campos deseados
@@ -63,17 +59,13 @@ class UserModel{
         return new JsonR(200, true, 'user-model-get', 'Authorization successful', {
             user: {
                 id: userFound._id,
-                username: userFound.username,
+                name: newUser.name,
+                lastname: newUser.lastname,
                 email: userFound.email,
-                credits: userFound.credits,
-                balance: userFound.balance,
                 role: userFound.role,
                 created_at: userFound.createdAt,
-                updated_at: userFound.updatedAt,
-                apps: totalApps,
-                posts: totalPosts
-            },
-            apps:userApps
+                updated_at: userFound.updatedAt
+            }
         });
     }
 }

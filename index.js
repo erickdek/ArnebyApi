@@ -8,12 +8,11 @@ import logger from './logger.js';
 const PORT = process.env.PORT ?? 3000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
-app.use(
-    cors({
-      credentials: true,
-      origin: FRONTEND_URL,
-    })
-);
+app.use(cors({
+  origin: [FRONTEND_URL,'http://localhost', 'https://arneby.com'],
+  credentials: true, // Si se requieren credenciales (como cookies)
+}));
+
 dbConnect();
 app.listen(PORT, (req, res) => {
     logger.info(`Server listening on port ${PORT}`);
