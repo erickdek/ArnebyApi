@@ -1,19 +1,19 @@
 import nodemailer from 'nodemailer';
 import logger from './logger';
+const {SMTP_SERVICE, SMTP_PORT, SMTP_TLS, SMTP_USER, SMTP_PASSWORD} = process.env;
 
 // Configura el transporte SMTP
 const transporter = nodemailer.createTransport({
-    service: 'smtp.example.com',
-    port: 587,
-    secure: false, // true para TLS, false para STARTTLS
+    service: SMTP_SERVICE,
+    port: SMTP_PORT,
+    secure: SMTP_TLS, // true para TLS, false para STARTTLS
     auth: {
-        user: 'tu_usuario@example.com',
-        pass: 'tu_contraseña'
+        user: SMTP_USER,
+        pass: SMTP_PASSWORD
     }
 });
 
 function sendEmail(sendFrom, sendTo, mailSubject, mailMessage){
-    
     // Define el correo electrónico a enviar
     const mailOptions = {
         from: sendFrom,
@@ -23,11 +23,9 @@ function sendEmail(sendFrom, sendTo, mailSubject, mailMessage){
     };
 
     // Envía el correo electrónico
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailOptions, (error) => {
         if (error) {
             logger.error(error);
-        } else {
-            logger.info(info.response);
         }
     });
 }
