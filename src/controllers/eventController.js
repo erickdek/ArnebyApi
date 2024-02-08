@@ -1,4 +1,4 @@
-import logger from '../../logger.js';
+import logger from '../services/logger.js';
 import { checkEvent } from '../schemas/validation/eventSchema.js';
 import Event from '../models/eventModel.js';
 import JsonR from '../models/jsonModel.js';

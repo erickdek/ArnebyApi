@@ -1,4 +1,4 @@
-import logger from '../../logger.js';
+import logger from '../services/logger.js';
 import User from '../models/userModel.js'
 import JsonR from '../models/jsonModel.js'
 import { checkUser, checkUserLogin } from '../schemas/validation/userSchema.js'

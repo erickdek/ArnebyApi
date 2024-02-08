@@ -1,11 +1,11 @@
 import { createLogger, transports, format } from 'winston';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { join } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Obtener la ruta de la carpeta raíz del proyecto
+const rootDir = process.cwd(); // Esto devuelve la ruta del directorio actual donde se está ejecutando el proceso Node.js
 
-const logDir = join(__dirname, 'logs');
+// Definir la ruta completa de la carpeta de logs
+const logDir = join(rootDir, 'logs');
 
 // Define un nuevo formato de fecha y hora
 const customFormat = format.printf(({ level, message }) => {
