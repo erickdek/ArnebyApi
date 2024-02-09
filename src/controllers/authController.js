@@ -93,6 +93,7 @@ export const profile = async (req, res) => {
         }
         return res.status(200).json(dataUser);
     } catch (e) {
+        logger.error("Error: " + e);
         return res.status(500).json(new JsonR(500, false, 'auth-constroller-profile', 'Internal Server Error', {}));
     }
 };

@@ -58,8 +58,8 @@ class UserModel{
         return new JsonR(200, true, 'user-model-get', 'Authorization successful', {
             user: {
                 id: userFound._id,
-                name: newUser.name,
-                lastname: newUser.lastname,
+                name: userFound.name,
+                lastname: userFound.lastname,
                 email: userFound.email,
                 role: userFound.role,
                 avatar: userFound.avatar,
