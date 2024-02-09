@@ -1,8 +1,12 @@
 import logger from '../services/logger.js';
-import User from '../models/userModel.js'
-import JsonR from '../models/jsonModel.js'
+import User from '../models/userModel.js';
+import JsonR from '../models/jsonModel.js';
+import email from '../services/email.js';
 import { checkUser, checkUserLogin } from '../schemas/validation/userSchema.js'
 
+/**
+ * Method to login a user
+ */
 export const login = async (req, res) => {
     //Validacion de datos
     const result = await checkUserLogin(req.body)
@@ -28,6 +32,10 @@ export const login = async (req, res) => {
     }
 };
 
+
+/**
+ * Method for registering a user
+ */
 export const register = async (req, res) => {
     //Validacion de datos
     const result = await checkUser(req.body)
@@ -55,15 +63,28 @@ export const register = async (req, res) => {
     }
 };
 
+
+/**
+ * Method for get a new password
+ */
 export const lostpass = async (req, res) => {
-    res.status(400).json({message: "User not found"});
+    email('erick.gom.marq@gmail.com', 'Lost password arneby', 'Esto es un test');
+    return res.status(500).json(new JsonR(500, false, 'auth-controller-register', 'Server error', {}));
 };
 
+
+/**
+ * Method for logout a user
+ */
 export const logout = async (req, res) => {
     res.cookie("token", "", {expires: new Date(0)})
     return res.status(200).json({message: "Logout Success"});
 };
 
+
+/**
+ * Method for get data of the current user
+ */
 export const profile = async (req, res) => {
     try {
         const dataUser = await User.get({id:req.user.id});

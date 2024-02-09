@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { login, register, logout, profile } from "../../../controllers/authController.js";
+import { login, register, logout, profile, lostpass } from "../../../controllers/authController.js";
 import { authRequired } from '../../../middlewares/validateToken.js';
 
 export const userRoute = Router();
@@ -8,4 +8,5 @@ userRoute
     .get('/', authRequired, profile)
     .post('/login', login)
     .post('/register', register)
+    .post('/lost-password', lostpass)
     .post('/logout', logout);
