@@ -8,7 +8,7 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 //Info about the Api
 const apiOptions = {
     definition: {
-        openapi: "3.0.1",
+        openapi: "3.0.0",
         info: {title: "Arneby API", version: "1.0.0"}
     },
     apis: [path.join(__dirname, "../v1/*.js")]
