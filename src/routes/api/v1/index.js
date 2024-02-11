@@ -26,24 +26,39 @@ v1Routes.get('/', (req, res) => {
     res.status(200).json(new JsonR(200, true, 'app', 'Welcome to API v1', {}));
 });
 
+
+//Componentes de SWAGGER para documentar
+
 /**
  * @swagger
  * components:
- *  schemas:
- *    JsonModel:
- *      type: object
- *      properties:
- *        status:
- *          type: number
- *        success:
- *          type: boolean
- *        code:
- *          type: string
- *        msg:
- *          type: string
- *        data:
- *          type: object
- *          description: Datos adicionales de la respuesta
+ *   securitySchemes:
+ *     cookieAuth:
+ *       type: apiKey
+ *       in: cookie
+ *       name: token
+ */
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     tokenAuth:
+ *       type: apiKey
+ *       in: header
+ *       name: Authorization
+ *       description: Token de autenticación JWT
+ */
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     queryAuth:
+ *       type: apiKey
+ *       in: query
+ *       name: token
+ *       description: Token de autenticación JWT
  */
     
 export default v1Routes;
