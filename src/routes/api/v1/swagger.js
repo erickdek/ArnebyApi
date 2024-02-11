@@ -1,5 +1,9 @@
 import SwaggerJSDoc from 'swagger-jsdoc';
 import SwaggerUI from 'swagger-ui-express';
+import url from 'url';
+import path from 'path';
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 //Info about the Api
 const apiOptions = {
@@ -7,7 +11,7 @@ const apiOptions = {
         openapi: "3.0.1",
         info: {title: "Arneby API", version: "1.0.0"}
     },
-    apis: ['src/routes/api/v1/index.js']
+    apis: [path.join(__dirname, "../v1/*.js")]
 }
 
 //DOCS en json format
