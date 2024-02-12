@@ -52,7 +52,13 @@ export const register = async (req, res) => {
             return res.status(400).json(new JsonR(400, false, 'auth-controller-register', JSON.parse(newUser.message), {}));
         }
         //Devolvemos token del usuario
-        return res.cookie("token", newUser.data.token).status(200).json(newUser);
+        return res.cookie("token", newUser.data.token, {
+            httpOnly: true, // Marcar la cookie como httpOnly para evitar que sea accesible desde JavaScript
+            secure: process.env.NODE_ENV === "production", // Solo permitir cookies seguras en producción (HTTPS)
+            sameSite: "strict", // Restringir el envío de cookies a peticiones del mismo sitio
+            maxAge: 24 * 60 * 60 * 1000, // Duración de la cookie en milisegundos (aquí es de 1 día)
+            path: "/", // Ruta en la que la cookie está disponible (aquí es la raíz del sitio)
+        }).status(200).json(newUser);
     } catch (e) {
         if (e.code === 11000 && e.keyPattern.email) {
             // El correo electrónico ya está en uso

@@ -32,6 +32,83 @@ v1Routes.get('/', (req, res) => {
 /**
  * @swagger
  * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         lastname:
+ *           type: string
+ *         email:
+ *           type: string
+ *         role:
+ *           type: string
+ *         avatar:
+ *           type: string
+ *         created_at:
+ *           type: string
+ *         updated_at:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     LoginData:
+ *       type: object
+ *       properties:
+ *         user:
+ *           type: object
+ *           properties:
+ *              id:
+ *                  type: string
+ *              name:
+ *                  type: string
+ *              lastname:
+ *                  type: string
+ *              email:
+ *                  type: string
+ *              role:
+ *                  type: string
+ *              avatar:
+ *                  type: string
+ *         token:
+*            type: apikey
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     JsonModel:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: number
+ *           description: El código de estado HTTP de la respuesta.
+ *         success:
+ *           type: boolean
+ *           description: Indica si la operación fue exitosa.
+ *         code:
+ *           type: string
+ *           description: Un código personalizado para la respuesta.
+ *         msg:
+ *           type: string
+ *           description: Un mensaje descriptivo de la respuesta.
+ *         data:
+ *           oneOf:
+ *             - $ref: '#/components/schemas/User'  # Para la respuesta de perfil de usuario
+ *             - $ref: '#/components/schemas/LoginData'  # Para la respuesta de inicio de sesión
+ *             - type: object  # Para otras respuestas que no necesitan datos específicos
+ */
+
+/**
+ * @swagger
+ * components:
  *   securitySchemes:
  *     cookieAuth:
  *       type: apiKey
