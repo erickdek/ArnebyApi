@@ -24,7 +24,13 @@ export const login = async (req, res) => {
             return res.status(loginUser.status).json(loginUser);
         }
         //Devolvemos token del usuario
-        return res.cookie("token", loginUser.data.token).status(loginUser.status).json(loginUser);
+        return res.cookie("token", newUser.data.token, {
+            httpOnly: true, // Marcar la cookie como httpOnly para evitar que sea accesible desde JavaScript
+            secure: process.env.NODE_ENV === "production", // Solo permitir cookies seguras en producción (HTTPS)
+            sameSite: "strict", // Restringir el envío de cookies a peticiones del mismo sitio
+            maxAge: 24 * 60 * 60 * 1000, // Duración de la cookie en milisegundos (aquí es de 1 día)
+            path: "/", // Ruta en la que la cookie está disponible (aquí es la raíz del sitio)
+        }).status(loginUser.status).json(loginUser);
     
     } catch (e) {
         logger.error(e.message);
