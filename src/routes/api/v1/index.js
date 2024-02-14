@@ -11,18 +11,18 @@ import { authRequiredAdmin } from '../../../middlewares/validateAdmin.js';
 const v1Routes = Router();
 
 // Acceder a informacion admin
-v1Routes.use('/admin', authRequired, authRequiredAdmin);
+v1Routes.use('/admin', authRequired, authRequiredAdmin)
 
 // App - Usuario, Asistencia
-v1Routes.use('/app', AppRoute);
+.use('/app', AppRoute)
 
 // Autorizacion - login y register
-v1Routes.use('/auth', userRoute);
+.use('/auth', userRoute)
 
 // Eventos - ver, editar, eliminar, crear, buscar
-v1Routes.use('/event', EventRoute);
+.use('/event', EventRoute)
 
-v1Routes.get('/', (req, res) => {
+.get('/', (req, res) => {
     res.status(200).json(new JsonR(200, true, 'app', 'Welcome to API v1', {}));
 });
 

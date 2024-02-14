@@ -4,13 +4,13 @@ import Event from '../models/eventModel.js';
 import JsonR from '../models/jsonModel.js';
 
 export const GetEvents = async (req, res) => {
-    const { eventsPerPage, page } = req.query;
+    let { events, page } = req.query;
 
     try {
-        const result = await AppModel.getAll({ eventsPerPage, page });
-        return res.status(result.statusCode).json(result);
+        const result = await Event.getAll({ events, page });
+        return res.status(result.status).json(result);
     } catch (err) {
-        console.error(err);
+        logger.error(err.message);
         return res.status(500).json(new JsonR(500, false, 'event-controller-getevent', 'Server error', {}));
     }
 };
@@ -20,9 +20,10 @@ export const GetEventId = async (req, res) => {
 };
 
 export const setEvent = async (req, res) => {
+    console.log(req.files);
     const result = await checkEvent(req.body);
     if(!result.success){
-        return res.status(400).json(new JsonR(400, false, 'event-controller-add', 'Error consulta', JSON.parse(result.error.message)))
+        return res.status(400).json(new JsonR(400, false, 'validation', 'Error consulta', JSON.parse(result.error.message)))
     }
     try {
         const newEvent = await Event.set({
@@ -33,7 +34,7 @@ export const setEvent = async (req, res) => {
             resume: req.body.resume
         })
         if(!newEvent.success){
-            return res.status(newEvent.statusCode).json(new JsonR(newEvent.statusCode, false, 'event-controller-add', newEvent.message, {}));
+            return res.status(newEvent.status).json(new JsonR(newEvent.status, false, 'event-controller-add', newEvent.message, {}));
         }
         return res.status(200).json(newEvent);
     } catch (e) {

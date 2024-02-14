@@ -9,8 +9,6 @@ const app = express();
 const __dirname = path.resolve(); // Corregir la obtención de __dirname
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
-//Jordy Estuvo aqui :D
-
 // Configuración de la aplicación
 app.disable('x-powered-by'); // Deshabilitar el encabezado "X-Powered-By"
 

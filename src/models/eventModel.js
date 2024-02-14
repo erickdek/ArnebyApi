@@ -1,6 +1,7 @@
-import Event from '../schemas/db/eventSchema.js'
+import Event from '../schemas/db/eventSchema.js';
+import logger from '../services/logger.js';
 import crypto from 'node:crypto';
-import JsonR from '../models/jsonModel.js'
+import JsonR from '../models/jsonModel.js';
 
 class eventModel{
 
@@ -16,7 +17,10 @@ class eventModel{
      * @param {String} address - Direccion del evento
      * @param {Boolean} virtual - Es virtual el evento true o false
      * @param {Array} links - Array de links [titulo, url]
-     * @param {
+     * @param {ObjectId} organizer - Id de mongodb del usuario organizador (quien publico)
+     * @param {Date} startDate - Fecha de inicio del evento
+     * @param {Date} endDate - Fecha de fin del evento
+     * @param {Image} featuredImage - Id de mongodb de la coleccion imagenes
      * @returns {Object} JsonR con todo el resultado final.
      */
     static async set({title, slug, content, longitude, latitude, country, province, address, virtual, links, prices, organizer, startDate, endDate, featuredImage}){
@@ -183,33 +187,33 @@ class eventModel{
      * @param {number} page - Page number.
      * @returns {Object} JsonR with the data/errors.
      */
-    static async getAll({ eventsPerPage, page }) {
+    static async getAll({ eventsPerPage = 10, page = 1 }) {
         try {
-        const pageNumber = parseInt(page, 10) || 1;
-        const pageSize = parseInt(eventsPerPage, 10) || 10; // Puedes ajustar el tamaño de la página según tus necesidades
+            const pageNumber = parseInt(page, 10);
+            const pageSize = parseInt(eventsPerPage, 10);
     
-        const events = await Event.find()
-            .skip((pageNumber - 1) * pageSize)
-            .limit(pageSize)
-            .exec();
-    
-        const totalEvents = await Event.countDocuments();
-        const totalPages = Math.ceil(totalEvents / pageSize);
-    
-        const result = {
-            events,
-            pageInfo: {
-            totalEvents,
-            totalPages,
-            currentPage: pageNumber,
-            eventsPerPage: pageSize,
-            },
-        };
-    
-        return new JsonR(200, true, 'app-model-getAll', 'Events found successfully', result);
+            const events = await Event.find()
+                .skip((pageNumber - 1) * pageSize)
+                .limit(pageSize)
+                .exec();
+        
+            const totalEvents = await Event.countDocuments();
+            const totalPages = Math.ceil(totalEvents / pageSize);
+        
+            const result = {
+                events,
+                pageInfo: {
+                    totalEvents,
+                    totalPages,
+                    currentPage: pageNumber,
+                    pageSize: pageSize,
+                }
+            };
+        
+            return new JsonR(200, true, 'app-model-getAll', 'Events found successfully', result);
         } catch (err) {
-        console.error(err);
-        return new JsonR(500, false, 'app-model-getAll', 'Server error', {});
+            logger.error(err);
+            return new JsonR(500, false, 'app-model-getAll', 'Server error', {});
         }
     }
 
