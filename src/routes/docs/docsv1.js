@@ -24,5 +24,5 @@ export const swaggerDocs = (app, port) => {
         res.send(specsV1);
     });
 
-    console.log(`Doc api/v1/docs is available at http://localhost:${port}/v1/documentation`);
+    console.log(`Doc api/v1/documentation is available at http://localhost:${port}/v1/documentation`);
 }
