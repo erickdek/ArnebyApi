@@ -1,4 +1,8 @@
-import { object, date, string, number, boolean, array } from 'zod'
+import { any, object, date, string, number, boolean, array } from 'zod'
+
+//Limit for files
+const MAX_FILE_SIZE = 1500000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 //ZOD
 const eventValidation = object({
@@ -29,7 +33,13 @@ const eventValidation = object({
     organizer: string(), // Puedes ajustar según el tipo de datos de tu organizador
     startDate: date(),
     endDate: date(),
-    featuredImage: string(), // Puedes ajustar según el tipo de datos de tu imagen destacada
+    featuredImage: any()
+      .refine((files) => files?.length == 1, "Image is required.")
+      .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max file size is 15MB.`)
+      .refine(
+        (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+        ".jpg, .jpeg, .png and .webp files are accepted."
+      ),
   });
 
 export function checkEvent(obj){

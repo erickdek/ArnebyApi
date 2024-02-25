@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-//MONGODB
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -31,6 +30,24 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'https://s3.us-central-1.wasabisys.com/src.arneby.com/web/avatar.svg',
+        trim: true
+    },
+    description: {
+        type: String,
+        default: '',
+        trim: true
+    },
+    country: {
+        type: String,
+        default: '',
+        trim: true
+    },
+    favoriteEvents: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event'
+    }],
+    preferences: {
+        type: String,
         trim: true
     }
 }, {

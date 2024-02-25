@@ -7,8 +7,11 @@ import { createAccessToken } from '../services/jwt.js'
 
 class UserModel{
     static async set({ name, lastname, email, password }){
+
+        //Encriptamos la contrasena
         const passwordhash = await bcryptjs.hash(password, 10);
-        
+
+        //Pasamos los parametros a guardar
         const newUser = new UserDB({
             name,
             lastname,
@@ -16,15 +19,22 @@ class UserModel{
             password: passwordhash
         });
         const saveUser = await newUser.save();
-        const token = await createAccessToken({id: saveUser._id});
+
+        //Creamos el Token
+        const token = await createAccessToken({
+            id: saveUser._id,
+            email: saveUser.email
+        });
+
+        //Devolvemos los datos
         return new JsonR(200, true, 'auth-controller-login', 'Register Success', {
             user: {
-                id: userFound._id,
-                name: userFound.name,
-                lastname: userFound.lastname,
-                email: userFound.email,
-                role: userFound.role,
-                avatar: userFound.avatar,
+                id: saveUser._id,
+                name: saveUser.name,
+                lastname: saveUser.lastname,
+                email: saveUser.email,
+                role: saveUser.role,
+                avatar: saveUser.avatar,
             },
             token: token
         })
@@ -34,10 +44,17 @@ class UserModel{
         const userFound = await UserDB.findOne({ email })
         if (!userFound) return new JsonR(400, false, 'user-model-check', 'Email or password incorrect', {});
 
+        //Si la contrasena es igual a la guardada
         const isMatch = await bcryptjs.compare(password, userFound.password);
         if (!isMatch) return new JsonR(400, false, 'user-model-check', 'Email or password incorrect', {});
 
-        const token = await createAccessToken({id: userFound._id});
+        //Creamos el token
+        const token = await createAccessToken({
+            id: userFound._id,
+            email: userFound.email
+        });
+
+        //Devolvemos los datos
         return new JsonR(200, true, 'user-model-check', 'Login successful', {
             user: {
                 id: userFound._id,

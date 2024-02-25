@@ -1,4 +1,5 @@
 import logger from '../services/logger.js';
+import { S3 } from '../services/s3.js';
 import { checkEvent } from '../schemas/validation/eventSchema.js';
 import Event from '../models/eventModel.js';
 import JsonR from '../models/jsonModel.js';
@@ -20,11 +21,12 @@ export const GetEventId = async (req, res) => {
 };
 
 export const setEvent = async (req, res) => {
-    console.log(req.files);
+    await S3.getAll(req.files.file);
+
     const result = await checkEvent(req.body);
-    if(!result.success){
-        return res.status(400).json(new JsonR(400, false, 'validation', 'Error consulta', JSON.parse(result.error.message)))
-    }
+    //if(!result.success){
+     //   return res.status(400).json(new JsonR(400, false, 'validation', 'Error consulta', JSON.parse(result.error.message)))
+    //}
     try {
         const newEvent = await Event.set({
             userid: req.user.id,

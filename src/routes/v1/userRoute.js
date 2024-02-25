@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { login, register, logout, profile, lostpass } from "../../../controllers/authController.js";
-import { authRequired } from '../../../middlewares/validateToken.js';
+import { login, register, logout, profile, lostpass } from "../../controllers/authController.js";
+import { authRequired } from '../../middlewares/validateToken.js';
 
 export const userRoute = Router();
 

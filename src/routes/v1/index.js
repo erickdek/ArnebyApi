@@ -11,20 +11,19 @@ import { authRequiredAdmin } from '../../../middlewares/validateAdmin.js';
 const v1Routes = Router();
 
 // Acceder a informacion admin
-v1Routes.use('/admin', authRequired, authRequiredAdmin)
+v1Routes
+    // App - Usuario, Asistencia
+    .use('/app', AppRoute)
 
-// App - Usuario, Asistencia
-.use('/app', AppRoute)
+    // Autorizacion - login y register
+    .use('/auth', userRoute)
 
-// Autorizacion - login y register
-.use('/auth', userRoute)
+    // Eventos - ver, editar, eliminar, crear, buscar
+    .use('/event', EventRoute)
 
-// Eventos - ver, editar, eliminar, crear, buscar
-.use('/event', EventRoute)
-
-.get('/', (req, res) => {
-    res.status(200).json(new JsonR(200, true, 'app', 'Welcome to API v1', {}));
-});
+    .get('/', (req, res) => {
+        res.status(200).json(new JsonR(200, true, 'app', 'Welcome to API v1', {}));
+    });
 
 
 //Componentes de SWAGGER para documentar

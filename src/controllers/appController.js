@@ -4,7 +4,6 @@ import App from '../models/appModel.js'
 import JsonR from '../models/jsonModel.js'
 
 export const GetApp = async (req, res) => {
-    
     return res.status(404).json(new JsonR(404, false, 'app-controller-getapp', 'App not found', {}));
 };
 
