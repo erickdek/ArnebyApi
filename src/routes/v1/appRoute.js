@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { GetApp, GetAppId, setApp, putApp, delApp } from "../../../controllers/appController.js";
-import { authRequired } from '../../../middlewares/validateToken.js';
+import { GetApp, GetAppId, setApp, putApp, delApp } from "../../controllers/appController.js";
+import { authRequired } from '../../middlewares/validateToken.js';
 export const AppRoute = Router();
 
 AppRoute

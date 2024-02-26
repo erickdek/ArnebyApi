@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { login, register, logout, profile, lostpass } from "../../controllers/authController.js";
+import fileUpload from 'express-fileupload'; //Upload files
+import { login, register, logout, profile, lostpass, newpassword } from "../../controllers/authController.js";
 import { authRequired } from '../../middlewares/validateToken.js';
 
 export const userRoute = Router();
@@ -7,10 +8,16 @@ export const userRoute = Router();
 
 
 userRoute
+    //Poder Subir archivos
+    .use(fileUpload({
+        useTempFiles : true,
+        tempFileDir : './uploads'
+    }))
     .get('/', authRequired, profile)
     .post('/login', login)
     .post('/register', register)
     .post('/lost-password', lostpass)
+    .post('/new-password', newpassword)
     .post('/logout', logout);
 
 /**

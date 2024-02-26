@@ -6,8 +6,17 @@ import JsonR from '../models/jsonModel.js'
 import { createAccessToken } from '../services/jwt.js'
 
 class UserModel{
-    static async set({ name, lastname, email, password }){
 
+    /**
+     * Registra un usuario.
+     * @param {Object} param0 - Objeto que contiene el correo electrónico y la contraseña del usuario.
+     * @param {String} param0.name - Nombre del usuario
+     * @param {String} param0.lastname - Apellido del usuario
+     * @param {string} param0.email - Correo electrónico del usuario.
+     * @param {string} param0.password - Contraseña del usuario.
+     * @returns {JsonR} Devuelve el Json Estructurado
+     */
+    static async set({ name, lastname, email, password }){
         //Encriptamos la contrasena
         const passwordhash = await bcryptjs.hash(password, 10);
 
@@ -40,8 +49,44 @@ class UserModel{
         })
     }
 
+
+    /**
+     * Check if the email is registered
+     * @param {Object} param0
+     * @param {string} param0.email - Correo electrónico del usuario.
+     * @returns {JsonR} Devuelve el Json Estructurado
+     */
+    static async checkEmail({email}) {
+        //Obtenemos todos los usuarios que tengan el email
+        const userFound = await UserDB.findOne({ email });
+
+        //Si no existe el usuario con el email
+        if (!userFound) return new JsonR(400, false, 'user-model-checkEmail', 'the email is not registered', {});
+
+        //Devolvemos los datos
+        return new JsonR(200, true, 'user-model-check', 'Login successful', {
+            user: {
+                id: userFound._id,
+                name: userFound.name,
+                lastname: userFound.lastname,
+                email: userFound.email,
+                role: userFound.role,
+                avatar: userFound.avatar,
+            }
+        });
+    }
+
+
+
+    /**
+     * Verifica las credenciales de usuario.
+     * @param {Object} param0 - Objeto que contiene el correo electrónico y la contraseña del usuario.
+     * @param {string} param0.email - Correo electrónico del usuario.
+     * @param {string} param0.password - Contraseña del usuario.
+     * @returns {JsonR} Devuelve el Json Estructurado
+     */
     static async check({email, password }){
-        const userFound = await UserDB.findOne({ email })
+        const userFound = await UserDB.findOne({ email });
         if (!userFound) return new JsonR(400, false, 'user-model-check', 'Email or password incorrect', {});
 
         //Si la contrasena es igual a la guardada
@@ -68,6 +113,14 @@ class UserModel{
         });
     }
 
+
+
+    /**
+     * Obtener un usuario con el Id
+     * @param {Object} param0 - Objeto que contiene el correo electrónico y la contraseña del usuario.
+     * @param {ObjectId} param0.id - Id del usuario.
+     * @returns {JsonR} Devuelve el Json Estructurado
+     */
     static async get({ id }) {
         const userFound = await UserDB.findById(id);
     

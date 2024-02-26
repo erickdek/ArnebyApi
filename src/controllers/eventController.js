@@ -4,6 +4,7 @@ import { checkEvent } from '../schemas/validation/eventSchema.js';
 import Event from '../models/eventModel.js';
 import JsonR from '../models/jsonModel.js';
 
+//Obtener eventos con parametros events y page
 export const GetEvents = async (req, res) => {
     let { events, page } = req.query;
 
@@ -16,12 +17,15 @@ export const GetEvents = async (req, res) => {
     }
 };
 
+//Obtener un evento por ID
 export const GetEventId = async (req, res) => {
     return res.status(404).json(new JsonR(404, false, 'event-controller-geteventid', 'Event not found', {}));
 };
 
+//Publicar un evento
 export const setEvent = async (req, res) => {
-    await S3.getAll(req.files.file);
+    console.log(req.files);
+    await S3.upload(req.files.file);
 
     const result = await checkEvent(req.body);
     //if(!result.success){

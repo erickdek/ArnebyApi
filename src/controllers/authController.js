@@ -2,17 +2,21 @@ import logger from '../services/logger.js';
 import User from '../models/userModel.js';
 import JsonR from '../models/jsonModel.js';
 import email from '../services/email.js';
-import { checkUser, checkUserLogin } from '../schemas/validation/userSchema.js'
+import { createAccessToken as newJWT } from '../services/jwt.js'
+import { checkUser, checkUserLogin, checkUserRescue } from '../schemas/validation/userSchema.js'
+
+//Email Templates
+import newPassTemplate from '../views/emails/newpass.js';
 
 /**
  * Method to login a user
  */
 export const login = async (req, res) => {
     //Validacion de datos
-    const result = await checkUserLogin(req.body)
+    const result = checkUserLogin(req.body)
     //Los datos no coinciden
     if(!result.success){
-        return res.status(400).json(new JsonR(400, false, 'auth-controller-login', 'Error consulta', JSON.parse(result.error.message)))
+        return res.status(400).json(new JsonR(400, false, 'login-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)))
     }
     
     //Consulta del usuario en la base de datos
@@ -38,10 +42,10 @@ export const login = async (req, res) => {
  */
 export const register = async (req, res) => {
     //Validacion de datos
-    const result = await checkUser(req.body)
+    const result = checkUser(req.body)
     //Los datos no coinciden
     if(!result.success){
-        return res.status(400).json(new JsonR(400, false, 'auth-controller-register', 'Error consulta', JSON.parse(result.error.message)))
+        return res.status(400).json(new JsonR(400, false, 'register-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)))
     }
 
     //Registro del usuario en la base de datos
@@ -63,13 +67,49 @@ export const register = async (req, res) => {
     }
 };
 
+export const newpassword = async (req, res) => {
+    
+}
 
 /**
  * Method for get a new password
  */
 export const lostpass = async (req, res) => {
-    email('erick.gom.marq@gmail.com', 'Lost password arneby', 'Esto es un test');
-    return res.status(500).json(new JsonR(500, false, 'auth-controller-register', 'Server error', {}));
+    //Validacion de datos
+    const result = checkUserRescue(req.body);
+
+    //Los datos no coinciden
+    if(!result.success){
+        return res.status(400).json(new JsonR(400, false, 'lastpassword-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)))
+    }
+
+    //Registro de un Token para un nuevo password
+    try {
+        const userData = await User.checkEmail(req.body);
+        //En caso de que no exista el usuario
+        if(!userData.success){
+            return res.status(userData.status).json(new JsonR(userData.status, userData.success, 'auth-controller-lostpass', userData.msg, {}));
+        }
+
+        //Creamos un token para un nuevo password
+        const token = await newJWT({
+            motive: 'new-password',
+            id: userData.data.user._id,
+            email: userData.data.user.email
+        }, '10m');
+
+        const url = `${process.env.FRONTEND_URL}/new-password/${token}`;
+        const emailContent = newPassTemplate(url);
+
+        email(userData.data.user.email, "Recuperar Contraseña - Arneby", emailContent);
+        logger.info('Froget-password to: '+req.body.email);
+        //Devolvemos token del usuario
+        return res.status(userData.status).json(new JsonR(userData.status, true, 'auth-controller-lostpass', 'Se envio un email para recuperar la contraseña', {}));
+
+    } catch (e) {
+        logger.error('Error: ' + e);
+        return res.status(500).json(new JsonR(500, false, 'auth-controller-lostpass', 'Server error', {}));
+    }
 };
 
 

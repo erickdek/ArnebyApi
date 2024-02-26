@@ -9,6 +9,8 @@ const PORT = process.env.PORT ?? 3000;
 dbConnect();
 app.listen(PORT, (req, res) => {
     logger.info(`Server listening on port ${PORT}`);
+
+    //Documentation for version 1 API
     v1Swagger(app, PORT);
 
     //Error 404 ninguna ruta concuerda

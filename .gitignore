@@ -5,6 +5,9 @@ npm-debug.log
 # Visual Studio Code
 .vscode/
 
+#Temp Files
+/uploads/*
+
 # Windows
 Thumbs.db
 Desktop.ini

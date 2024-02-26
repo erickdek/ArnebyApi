@@ -3,21 +3,24 @@ import logger from './logger.js';
 
 const {
   SMTP_EMAILFROM,
-  SMTP_SERVICE,
+  SMTP_HOST,
   SMTP_PORT,
-  SMTP_TLS,
+  SMTP_SECURE,
   SMTP_USER,
   SMTP_PASSWORD
 } = process.env;
 
 // Configura el transporte SMTP
-const transporter = nodemailer.createTransport({
-  service: SMTP_SERVICE,
+let transporter = nodemailer.createTransport({
+  host: SMTP_HOST,
   port: SMTP_PORT,
-  secure: SMTP_TLS === 'true', // Convertir a booleano
+  secure: SMTP_SECURE === 'true', // Convertir a booleano
   auth: {
     user: SMTP_USER,
     pass: SMTP_PASSWORD
+  },
+  tls: {
+    ciphers:'SSLv3'
   }
 });
 
@@ -25,21 +28,20 @@ const transporter = nodemailer.createTransport({
 function sendEmail(sendTo, mailSubject, mailMessage) {
   // Define el correo electrónico a enviar
   const mailOptions = {
-    from: SMTP_EMAILFROM,
-    to: sendTo,
+    from: "Arneby <" + SMTP_EMAILFROM + ">",
+    to: "<" + sendTo + ">",
     subject: mailSubject,
-    text: mailMessage
+    html: mailMessage
   };
 
   // Envía el correo electrónico
   transporter.sendMail(mailOptions, (error) => {
     if (error) {
-      logger.error('Error: ' + error);
-    } else {
-      logger.info(`Correo electrónico enviado a ${sendTo}`);
+      logger.error('Email: ' + error);
     }
   });
 }
+
 
 // Exporta la función para enviar correo electrónico
 export default sendEmail;

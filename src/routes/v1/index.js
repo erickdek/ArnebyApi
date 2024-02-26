@@ -1,17 +1,21 @@
 import { Router } from 'express';
-import JsonR from '../../../models/jsonModel.js'
+import JsonR from '../../models/jsonModel.js'
 //ROUTES
 import { userRoute } from "./userRoute.js";
 import { AppRoute } from "./appRoute.js";
 import { EventRoute } from "./eventRoute.js";
 //CONTROLLERS
-import { authRequired } from '../../../middlewares/validateToken.js';
-import { authRequiredAdmin } from '../../../middlewares/validateAdmin.js';
+import { authRequired } from '../../middlewares/validateToken.js';
+import { authRequiredAdmin } from '../../middlewares/validateAdmin.js';
 
 const v1Routes = Router();
 
 // Acceder a informacion admin
 v1Routes
+    //Welcome
+    .get('/', (req, res) => {
+        res.status(200).json(new JsonR(200, true, 'app', 'Welcome to API v1', {}));
+    })
     // App - Usuario, Asistencia
     .use('/app', AppRoute)
 
@@ -19,11 +23,7 @@ v1Routes
     .use('/auth', userRoute)
 
     // Eventos - ver, editar, eliminar, crear, buscar
-    .use('/event', EventRoute)
-
-    .get('/', (req, res) => {
-        res.status(200).json(new JsonR(200, true, 'app', 'Welcome to API v1', {}));
-    });
+    .use('/event', EventRoute);
 
 
 //Componentes de SWAGGER para documentar
