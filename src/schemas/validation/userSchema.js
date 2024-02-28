@@ -57,6 +57,17 @@ const userLostPasswordValidation = object({
     })
 })
 
+//ZOD - Password
+const userPasswordValidation = object({
+    token: string({
+        required_error: 'token is required'
+    }),
+    password: string({
+        required_error: 'password is required'
+    })
+})
+
+
 export function checkUser(obj){
     return userValidation.safeParse(obj)
 }
@@ -67,4 +78,8 @@ export function checkUserLogin(obj){
 
 export function checkUserRescue(obj){
     return userLostPasswordValidation.safeParse(obj)
+}
+
+export function checkChangePassword(obj){
+    return userPasswordValidation.safeParse(obj)
 }

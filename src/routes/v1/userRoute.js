@@ -5,8 +5,6 @@ import { authRequired } from '../../middlewares/validateToken.js';
 
 export const userRoute = Router();
 
-
-
 userRoute
     //Poder Subir archivos
     .use(fileUpload({
@@ -18,7 +16,7 @@ userRoute
     .post('/register', register)
     .post('/lost-password', lostpass)
     .post('/new-password', newpassword)
-    .post('/logout', logout);
+    //.post('/logout', logout);
 
 /**
  * @swagger

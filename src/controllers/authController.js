@@ -1,9 +1,12 @@
+import jwt from 'jsonwebtoken';
 import logger from '../services/logger.js';
 import User from '../models/userModel.js';
 import JsonR from '../models/jsonModel.js';
 import email from '../services/email.js';
 import { createAccessToken as newJWT } from '../services/jwt.js'
-import { checkUser, checkUserLogin, checkUserRescue } from '../schemas/validation/userSchema.js'
+import { checkUser, checkUserLogin, checkUserRescue, checkChangePassword } from '../schemas/validation/userSchema.js'
+
+const { SECRET_KEY_TOKEN } = process.env;
 
 //Email Templates
 import newPassTemplate from '../views/emails/newpass.js';
@@ -67,9 +70,55 @@ export const register = async (req, res) => {
     }
 };
 
+
+/**
+ * Method for change password with token
+ */
 export const newpassword = async (req, res) => {
+    // Validación de datos
+    const result = checkChangePassword(req.body);
     
-}
+    // Los datos no coinciden
+    if (!result.success) {
+        return res.status(400).json(new JsonR(400, false, 'newpassword-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)));
+    }
+
+    // Verificar si se proporcionó un token
+    if (!req.body.token) {
+        return res.status(500).json(new JsonR(500, false, 'auth-controller-newpassword', 'Se requiere un token', {}));
+    }
+
+    // Variable para guardar los datos del token
+    let tokenData = {
+        id: "",
+        password: req.body.password
+    };
+
+    try {
+        await jwt.verify(req.body.token, SECRET_KEY_TOKEN, async(err, data) => {
+            // El token es inválido
+            if (err) {
+                return res.status(401).json(new JsonR(401, false, 'auth-controller-newpassword-jwt', 'Token inválido', {}));
+            }
+            
+            // El token no es válido para cambiar la contraseña
+            if (data.method !== "new-password") {
+                return res.status(401).json(new JsonR(401, false, 'auth-controller-checknewpassword-jwt', 'El token no es válido para cambiar la contraseña', {}));
+            }
+
+            // Asignar el ID del usuario del token a tokenData
+            tokenData.id = data.id;
+
+            // Ahora que hemos asignado el ID del usuario, llamamos a User.newPass() dentro de esta función de devolución de llamada
+            const result = await User.newPass(tokenData);
+            return res.status(result.status).json(new JsonR(result.status, result.success, 'auth-controller-checknewpassword', result.msg, {}));
+        });
+    } catch (e) {
+        logger.error('Error: ' + e);
+        return res.status(500).json(new JsonR(500, false, 'auth-controller-lostpass', 'Error del servidor', {}));
+    }
+};
+
 
 /**
  * Method for get a new password
@@ -93,10 +142,11 @@ export const lostpass = async (req, res) => {
 
         //Creamos un token para un nuevo password
         const token = await newJWT({
-            motive: 'new-password',
-            id: userData.data.user._id,
-            email: userData.data.user.email
+            method: 'new-password',
+            id: userData.data.user.id
         }, '10m');
+
+        console.log(token);
 
         const url = `${process.env.FRONTEND_URL}/new-password/${token}`;
         const emailContent = newPassTemplate(url);

@@ -1,5 +1,4 @@
 import logger from '../services/logger.js';
-import { checkAppGen } from '../schemas/validation/appSchema.js';
 import App from '../models/appModel.js'
 import JsonR from '../models/jsonModel.js'
 
@@ -12,10 +11,7 @@ export const GetAppId = async (req, res) => {
 };
 
 export const setApp = async (req, res) => {
-    const result = await checkAppGen(req.body);
-    if(!result.success){
-        return res.status(400).json(new JsonR(400, false, 'app-controller-add', 'Error consulta', JSON.parse(result.error.message)))
-    }
+    
     try {
         const newApp = await App.set({
             userid: req.user.id,

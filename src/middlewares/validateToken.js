@@ -9,9 +9,9 @@ export const authRequired = (req, res, next) => {
         return res.status(400).json(new JsonR(400, false, 'validate-token', 'Token is required', {}));
     }
 
-    jwt.verify(token, SECRET_KEY_TOKEN, (err, user) => {
+    jwt.verify(token, SECRET_KEY_TOKEN, (err, data) => {
         if(err) return res.status(401).json(new JsonR(401, false, 'validate-token', 'Invalid Token', {}));
-        req.user = user;
+        req.token = data;
         next();
     });
 }

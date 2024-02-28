@@ -31,12 +31,13 @@ class UserModel{
 
         //Creamos el Token
         const token = await createAccessToken({
+            method: "login",
             id: saveUser._id,
             email: saveUser.email
         });
 
         //Devolvemos los datos
-        return new JsonR(200, true, 'auth-controller-login', 'Register Success', {
+        return new JsonR(200, true, 'user-model-set', 'Register Success', {
             user: {
                 id: saveUser._id,
                 name: saveUser.name,
@@ -48,6 +49,36 @@ class UserModel{
             token: token
         })
     }
+
+    /**
+     * Cambia la contraseña de un usuario.
+     * @param {Object} param0 - Objeto que contiene el ID del usuario y la nueva contraseña.
+     * @param {string} param0.id - ID del usuario.
+     * @param {string} param0.password - Nueva contraseña del usuario.
+     * @returns {JsonR} Devuelve el objeto JSON estructurado con el resultado de la operación.
+     */
+    static async newPass({ id, password }) {
+        try {
+            // Buscar el usuario por su ID
+            const user = await UserDB.findById(id);
+            // Comprobar si el usuario existe
+            if (!user) {
+                return new JsonR(404, false, 'user-model-newPass', 'Usuario no encontrado', {});
+            }
+            // Encriptar la nueva contraseña
+            const hashedPassword = await bcryptjs.hash(password, 10);
+            
+            // Actualizar la contraseña del usuario en la base de datos
+            user.password = hashedPassword;
+            await user.save();
+            
+            // Devolver una respuesta exitosa
+            return new JsonR(200, true, 'user-model-newPass', 'Contraseña actualizada exitosamente', {});
+        } catch (error) {
+            return new JsonR(500, false, 'user-model-newPass', 'Error interno del servidor', {});
+        }
+    }
+
 
 
     /**
@@ -95,6 +126,7 @@ class UserModel{
 
         //Creamos el token
         const token = await createAccessToken({
+            method: "login",
             id: userFound._id,
             email: userFound.email
         });
