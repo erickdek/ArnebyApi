@@ -1,21 +1,20 @@
 import { Router } from 'express';
 import { authRequired } from '../../middlewares/validateToken.js';
 import { setEvent, GetEvents,  } from '../../controllers/eventController.js';
+import { getAllCategory, getCategoryById, postCategory, getCategoryBySlug } from '../../controllers/categoryController.js';
+import { authRequiredAdmin } from '../../middlewares/validateAdmin.js';
 
 export const EventRoute = Router();
 
 EventRoute
-    //Obtener eventos
+    //Eventos
     .get('/', GetEvents)
-
-    //Obtener un evento
     .get('/:idApp', )
-
-    //Eliminar un evento
-    .delete('/:idApp', authRequired)
-    
-    //Publicar un evento
     .post('/', setEvent)
-
-    //Actualizar un evento
+    .delete('/:idApp', authRequired)
     .put('/:idApp', )
+
+    //Categorias
+    .get('/category', getAllCategory)
+    .get('/category/:id', getCategoryById)
+    .post('/category', authRequiredAdmin, postCategory)

@@ -14,6 +14,8 @@ app.disable('x-powered-by'); // Deshabilitar el encabezado "X-Powered-By"
 app.use(bodyParser.json());
 app.use(express.json());
 
+app.set('trust proxy', true);
+
 app.use(cors({
     origin: ['http://localhost:4321', FRONTEND_URL, 'https://arneby.com'],
     credentials: true, // Si se requieren credenciales (como cookies)

@@ -5,6 +5,7 @@ const eventSchema = new mongoose.Schema({
     title: { type: String, required: true },
     slug: { type: String, required: true },
     content: { type: String, required: true },
+    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
     location: {
         longitude: { type: Number, required: true },
         latitude: { type: Number, required: true },
@@ -28,8 +29,8 @@ const eventSchema = new mongoose.Schema({
     ],
     organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     registeredUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true },
+    startDate: { type: Number, required: true },
+    endDate: { type: Number, required: true },
     featuredImage: { type: mongoose.Schema.Types.ObjectId, ref: 'Media' },
 }, {
     timestamps: true

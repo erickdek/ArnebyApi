@@ -38,4 +38,4 @@ const mediaSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export default mongoose.model('media', mediaSchema);
+export default mongoose.model('Media', mediaSchema);

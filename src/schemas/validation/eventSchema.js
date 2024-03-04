@@ -10,6 +10,8 @@ const eventValidation = object({
     .min(1, { message: "El contenido es requerido." })
     .max(5000, { message: "El contenido no debe exceder los 5000 caracteres." }),
 
+  category: string({ message: "El ID de la categoria es requerida." }),
+
   location: object({
     longitude: number({ message: "La longitud debe ser un número." }),
     latitude: number({ message: "La latitud debe ser un número." }),
@@ -38,6 +40,8 @@ const eventValidation = object({
   endDate: number().refine(timestamp => new Date(timestamp).getTime() > 0, {
     message: "La fecha de fin debe ser un timestamp válido y positivo."
   }),
+
+  featuredImage: string({ message: "El ID de la imagen destacada es requerido." }),
 });
 
 

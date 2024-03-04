@@ -48,7 +48,8 @@ class eventModel{
             const saveEvnt = await newEvent.save();
             return new JsonR(200,true,'app-model-set','Event create successfully', saveEvnt);
         } catch (err) {
-            return new JsonR(500, false, 'app-model-set', 'Server error', {});
+            console.error('Error:', err);
+            throw err; // Lanzar el error para que sea manejado por el código que llama a esta función
         }
     }
 
@@ -76,7 +77,8 @@ class eventModel{
 
             return new JsonR(200, true, 'event-model-addOneLink', 'Event add link successfully', saveEvnt);
         } catch (err) {
-            return new JsonR(500, false, 'app-model-set', 'Server error', {});
+            console.error('Error:', err);
+            throw err; // Lanzar el error para que sea manejado por el código que llama a esta función
         }
     }
 
@@ -105,7 +107,8 @@ class eventModel{
 
             return new JsonR(200, true, 'event-model-addOneLink', 'Event add link successfully', saveEvnt);
         } catch (err) {
-            return new JsonR(500, false, 'app-model-set', 'Server error', {});
+            console.error('Error:', err);
+            throw err; // Lanzar el error para que sea manejado por el código que llama a esta función
         }
     }
 
@@ -133,7 +136,8 @@ class eventModel{
     
         return new JsonR(200, true, 'event-model-addLinks', 'Event add links successfully', saveEvent);
         } catch (err) {
-        return new JsonR(500, false, 'app-model-set', 'Server error', {});
+            console.error('Error:', err);
+            throw err; // Lanzar el error para que sea manejado por el código que llama a esta función
         }
     }
 
