@@ -2,7 +2,7 @@ import { object, string } from 'zod';
 
 const postCategory = object({
     name: string().min(1, { message: "El nombre es requerido." }),
-    description: string().min(1, { message: "La descripción es requerida." }),
+    description: string().min(0, { message: "La descripción debe tener al menos 1 carácter." }).optional(),
 });
 
 const CategoryIdSchema = object({

@@ -17,4 +17,6 @@ EventRoute
     //Categorias
     .get('/category', getAllCategory)
     .get('/category/:id', getCategoryById)
-    .post('/category', authRequiredAdmin, postCategory)
+    .get('/category_slug/:slug', getCategoryBySlug)
+    .get('/category_name/:name', getCategoryById)
+    .post('/category', authRequired, authRequiredAdmin, postCategory)

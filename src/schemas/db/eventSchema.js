@@ -9,8 +9,8 @@ const eventSchema = new mongoose.Schema({
     location: {
         longitude: { type: Number, required: true },
         latitude: { type: Number, required: true },
-        country: { type: String, required: true },
-        province: { type: String, required: true },
+        country: { type: String },
+        province: { type: String },
         address: { type: String, required: true },
     },
     virtual: { type: Boolean, default: false },

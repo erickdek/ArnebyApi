@@ -16,6 +16,7 @@ class fileModel {
 
     static async post({ file, user }) {
         try {
+            console.log(file);
             const extension = path.extname(file.name).toLowerCase();
             const code = uuidv4().substring(0, 5).replace(/-/g, '');
             const date = new Date();

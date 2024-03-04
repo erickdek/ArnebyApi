@@ -10,7 +10,9 @@ const eventValidation = object({
     .min(1, { message: "El contenido es requerido." })
     .max(5000, { message: "El contenido no debe exceder los 5000 caracteres." }),
 
-  category: string({ message: "El ID de la categoria es requerida." }),
+  category: string({ message: "El ID de la categoria es requerida." }).refine(value => /^[0-9a-fA-F]{24}$/.test(value), {
+    message: "El ID de la categoría debe ser un ID de MongoDB válido."
+  }),
 
   location: object({
     longitude: number({ message: "La longitud debe ser un número." }),

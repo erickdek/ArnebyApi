@@ -22,15 +22,13 @@ export const postCategory = async (req, res) => {
         if(!check.success){
             return res.status(400).json(new JsonR(400, false, 'category-controller-validation', 'Error en la consulta', JSON.parse(check.error.message)))
         }
-
-        const { name, description } = req.body; // Extrae los campos name y description del cuerpo de la solicitud
+        const { name } = req.body; // Extrae los campos name y description del cuerpo de la solicitud
         // Aquí puedes agregar la lógica para convertir el nombre en slug según lo requerido
-        const Category = new CategoryDB({
-            name: name,
-            description: description,
-        });
-        const result = await Category.save();
-        return res.status(200).json(new JsonR(200, true, 'category-controller-postCategory', 'Categoría publicada con éxito', result));
+        const descripcion = req.bodydescription ? req.bodydescription : '';
+
+        const result = await Category.post({ name, descripcion });
+        return res.status(result.status).json(result);
+
     } catch (err) {
         logger.error(err.message);
         return res.status(500).json(new JsonR(500, false, 'category-controller-postCategory', 'Error interno del servidor', {}));
@@ -40,7 +38,7 @@ export const postCategory = async (req, res) => {
 // Método para obtener una categoría por su slug
 export const getCategoryBySlug = async (req, res) => {
     try {
-        const check = checkSlugCategory(req.body);
+        const check = checkSlugCategory(req.params);
         if(!check.success){
             return res.status(400).json(new JsonR(400, false, 'category-controller-validation', 'Error en la consulta', JSON.parse(check.error.message)))
         }
@@ -57,7 +55,7 @@ export const getCategoryBySlug = async (req, res) => {
 // Método para obtener una categoría por su ID
 export const getCategoryById = async (req, res) => {
     try {
-        const check = checkIdCategory(req.body);
+        const check = checkIdCategory(req.params);
         if(!check.success){
             return res.status(400).json(new JsonR(400, false, 'category-controller-validation', 'Error en la consulta', JSON.parse(check.error.message)))
         }
@@ -74,7 +72,7 @@ export const getCategoryById = async (req, res) => {
 // Método para obtener una categoría por su nombre
 export const getCategoryByName = async (req, res) => {
     try {
-        const check = checkNameCategory(req.body);
+        const check = checkNameCategory(req.params);
         if(!check.success){
             return res.status(400).json(new JsonR(400, false, 'category-controller-validation', 'Error en la consulta', JSON.parse(check.error.message)))
         }
@@ -91,7 +89,7 @@ export const getCategoryByName = async (req, res) => {
 // Método para eliminar una categoría por su ID
 export const deleteCategoryById = async (req, res) => {
     try {
-        const check = checkIdCategory(req.body);
+        const check = checkIdCategory(req.params);
         if(!check.success){
             return res.status(400).json(new JsonR(400, false, 'category-controller-validation', 'Error en la consulta', JSON.parse(check.error.message)))
         }

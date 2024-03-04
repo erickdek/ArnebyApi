@@ -23,19 +23,13 @@ class eventModel{
      * @param {Image} featuredImage - Id de mongodb de la coleccion imagenes
      * @returns {Object} JsonR con todo el resultado final.
      */
-    static async set({title, slug, content, longitude, latitude, country, province, address, virtual, links, prices, organizer, startDate, endDate, featuredImage}){
+    static async set({title, slug, content, location, virtual, links, prices, organizer, startDate, endDate, featuredImage}){
         try {
             const newEvent = new Event({
                 title: title,
                 slug: slug,
                 content: content,
-                location: {
-                    longitude: longitude,
-                    latitude: latitude,
-                    country: country,
-                    province: province,
-                    address: address,
-                },
+                location: location,
                 virtual: virtual,
                 links: links,
                 prices: prices,

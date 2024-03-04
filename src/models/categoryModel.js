@@ -1,4 +1,4 @@
-import CategoryDB from '../models/categoryModel.js';
+import CategoryDB from '../schemas/db/categorySchema.js';
 import JsonR from '../models/jsonModel.js'
 
 class CategoryModel{
@@ -64,8 +64,7 @@ class CategoryModel{
      */
     static async get() {
         try {
-            const result = CategoryDB.find();
-
+            const result = await CategoryDB.find();
             // Devolvemos los datos
             return new JsonR(200, true, 'category-model-get', 'Se obtuvieron las categorías', result);
         } catch (error) {

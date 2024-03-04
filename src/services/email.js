@@ -25,7 +25,7 @@ let transporter = nodemailer.createTransport({
 });
 
 // Función para enviar correo electrónico
-function sendEmail(sendTo, mailSubject, mailMessage) {
+async function sendEmail(sendTo, mailSubject, mailMessage) {
   // Define el correo electrónico a enviar
   const mailOptions = {
     from: "Arneby <" + SMTP_EMAILFROM + ">",
