@@ -129,7 +129,7 @@ class UserModel{
         const token = await createAccessToken({
             method: "login",
             id: userFound._id,
-            role: saveUser.role,
+            role: userFound.role,
             email: userFound.email
         });
 

@@ -10,7 +10,6 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
 // Configuración de la aplicación
 app.disable('x-powered-by'); // Deshabilitar el encabezado "X-Powered-By"
-app.set('trust proxy', true);
 
 app.use(bodyParser.json());
 app.use(express.json());
