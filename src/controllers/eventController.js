@@ -24,21 +24,18 @@ export const GetEventId = async (req, res) => {
 
 //Publicar un evento
 export const setEvent = async (req, res) => {
-    console.log(req.files);
-    await S3.upload(req.files.file);
-
-    const result = await checkEvent(req.body);
-    //if(!result.success){
-     //   return res.status(400).json(new JsonR(400, false, 'validation', 'Error consulta', JSON.parse(result.error.message)))
-    //}
     try {
-        const newEvent = await Event.set({
-            userid: req.user.id,
-            name: req.body.name,
-            domain: req.body.domain,
-            apptype: req.body.apptype,
-            resume: req.body.resume
-        })
+        const result = checkEvent(req.body);
+
+        if(!result.success){
+            console.log(new JsonR(400, false, 'validation', 'Error consulta', JSON.parse(result.error.message)));
+            return res.status(400).json(new JsonR(400, false, 'validation', 'Error consulta', JSON.parse(result.error.message)));
+        }
+
+        await S3.upload(req.files.featuredImage);
+        
+        //Registrar Evento
+        const newEvent = await Event.set(req.body)
         if(!newEvent.success){
             return res.status(newEvent.status).json(new JsonR(newEvent.status, false, 'event-controller-add', newEvent.message, {}));
         }

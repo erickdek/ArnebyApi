@@ -20,6 +20,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.513.0",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -30,8 +31,10 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.9",
     "redis": "^4.6.13",
+    "sharp": "^0.33.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
+    "uuid": "^9.0.1",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
   },

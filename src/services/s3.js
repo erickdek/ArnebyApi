@@ -16,20 +16,29 @@ const client = new S3Client({
 export class S3 {
     /**
      * Upload a file to the bucket.
-     * @param {*} file 
-     * @returns 
+     * @param {*} file
+     * @returns
      */
-    static async upload(file){
-        const stream = fs.createReadStream(file.tempFilePath);
-        const uploadParams = {
-            Bucket: AWS_BUCKET_NAME,
-            Key: file.name,
-            Body: stream
+    static async upload({ file, dir = '', read = false }) {
+        try {
+            const stream = fs.createReadStream(file.tempFilePath);
+            const key = dir + file.name;
+    
+            const uploadParams = {
+                Bucket: AWS_BUCKET_NAME,
+                Key: key,
+                Body: stream,
+                ACL: read ? 'public-read' : 'private'
+            }
+    
+            const command = new PutObjectCommand(uploadParams);
+            const result = await client.send(command);
+    
+            return { s3: result, url: key };
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
         }
-
-        const command = new PutObjectCommand(uploadParams);
-
-        return await client.send(command);
     }
 
 

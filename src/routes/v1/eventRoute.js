@@ -1,17 +1,10 @@
 import { Router } from 'express';
-import fileUpload from 'express-fileupload'; //Upload files
 import { authRequired } from '../../middlewares/validateToken.js';
 import { setEvent, GetEvents,  } from '../../controllers/eventController.js';
 
 export const EventRoute = Router();
 
 EventRoute
-    //Poder Subir archivos
-    .use(fileUpload({
-        useTempFiles : true,
-        tempFileDir : './uploads'
-    }))
-    
     //Obtener eventos
     .get('/', GetEvents)
 
@@ -20,7 +13,7 @@ EventRoute
 
     //Eliminar un evento
     .delete('/:idApp', authRequired)
-
+    
     //Publicar un evento
     .post('/', setEvent)
 

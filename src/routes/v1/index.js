@@ -2,7 +2,7 @@ import { Router } from 'express';
 import JsonR from '../../models/jsonModel.js'
 //ROUTES
 import { userRoute } from "./userRoute.js";
-import { AppRoute } from "./appRoute.js";
+import { fileRoute } from "./fileRoute.js";
 import { EventRoute } from "./eventRoute.js";
 //CONTROLLERS
 import { authRequired } from '../../middlewares/validateToken.js';
@@ -16,8 +16,8 @@ v1Routes
     .get('/', (req, res) => {
         res.status(200).json(new JsonR(200, true, 'app', 'Welcome to API v1', {}));
     })
-    // App - Usuario, Asistencia
-    .use('/app', AppRoute)
+    // Archivos
+    .use('/file', fileRoute)
 
     // Autorizacion - login y register
     .use('/auth', userRoute)

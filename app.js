@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import bodyParser from 'body-parser';
 import Routes from './src/routes/index.js';
 import cookieParser from 'cookie-parser';
 import cors from "cors";
@@ -10,6 +11,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 // Configuración de la aplicación
 app.disable('x-powered-by'); // Deshabilitar el encabezado "X-Powered-By"
 
+app.use(bodyParser.json());
 app.use(express.json());
 
 app.use(cors({

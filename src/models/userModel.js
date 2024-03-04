@@ -33,6 +33,7 @@ class UserModel{
         const token = await createAccessToken({
             method: "login",
             id: saveUser._id,
+            role: saveUser.role,
             email: saveUser.email
         });
 
@@ -128,6 +129,7 @@ class UserModel{
         const token = await createAccessToken({
             method: "login",
             id: userFound._id,
+            role: saveUser.role,
             email: userFound.email
         });
 

@@ -1,47 +1,46 @@
 import { any, object, date, string, number, boolean, array } from 'zod'
 
-//Limit for files
-const MAX_FILE_SIZE = 1500000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
 //ZOD
 const eventValidation = object({
-    title: string().min(1),
-    slug: string().min(1),
-    content: string().min(1),
-    location: object({
-      longitude: number(),
-      latitude: number(),
-      country: string().min(1),
-      province: string().min(1),
-      address: string().min(1),
-    }),
-    virtual: boolean(),
-    links: array(
-      object({
-        title: string().min(1),
-        url: string().min(1),
-      })
-    ),
-    prices: array(
-      object({
-        plan: string().min(1),
-        benefits: array(string()),
-        price: number(),
-      })
-    ),
-    organizer: string(), // Puedes ajustar según el tipo de datos de tu organizador
-    startDate: date(),
-    endDate: date(),
-    featuredImage: any()
-      .refine((files) => files?.length == 1, "Image is required.")
-      .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max file size is 15MB.`)
-      .refine(
-        (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-        ".jpg, .jpeg, .png and .webp files are accepted."
-      ),
-  });
+  title: string()
+    .min(1, { message: "El título es requerido." })
+    .max(100, { message: "El título no debe exceder los 100 caracteres." }),
+    
+  content: string()
+    .min(1, { message: "El contenido es requerido." })
+    .max(5000, { message: "El contenido no debe exceder los 5000 caracteres." }),
 
-export function checkEvent(obj){
-    return eventValidation.safeParse(obj)
+  location: object({
+    longitude: number({ message: "La longitud debe ser un número." }),
+    latitude: number({ message: "La latitud debe ser un número." }),
+    address: string().min(1, { message: "La dirección es requerida." }),
+  }),
+
+  virtual: boolean({ message: "El valor virtual debe ser verdadero o falso." }),
+  links: array(
+    object({
+      title: string().min(1, { message: "El título del enlace es requerido." }),
+      url: string().min(1, { message: "La URL del enlace es requerida." }),
+    })
+  ),
+  prices: array(
+    object({
+      plan: string().min(1, { message: "El plan es requerido." }),
+      benefits: array(string(), { message: "Los beneficios deben ser un arreglo de cadenas." }),
+      price: number({ message: "El precio debe ser un número." }),
+    })
+  ),
+
+  startDate: number().refine(timestamp => new Date(timestamp).getTime() > 0, {
+    message: "La fecha de inicio debe ser un timestamp válido y positivo."
+  }),
+
+  endDate: number().refine(timestamp => new Date(timestamp).getTime() > 0, {
+    message: "La fecha de fin debe ser un timestamp válido y positivo."
+  }),
+});
+
+
+export function checkEvent(obj) {
+  return eventValidation.safeParse(obj);
 }

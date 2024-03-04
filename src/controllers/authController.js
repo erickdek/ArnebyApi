@@ -15,15 +15,15 @@ import newPassTemplate from '../views/emails/newpass.js';
  * Method to login a user
  */
 export const login = async (req, res) => {
-    //Validacion de datos
-    const result = checkUserLogin(req.body)
-    //Los datos no coinciden
-    if(!result.success){
-        return res.status(400).json(new JsonR(400, false, 'login-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)))
-    }
-    
     //Consulta del usuario en la base de datos
     try {
+        //Validacion de datos
+        const result = checkUserLogin(req.body)
+        //Los datos no coinciden
+        if(!result.success){
+            return res.status(400).json(new JsonR(400, false, 'login-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)))
+        }
+
         const loginUser = await User.check(req.body);
         
         //En caso de que no exista el usuario
@@ -44,15 +44,15 @@ export const login = async (req, res) => {
  * Method for registering a user
  */
 export const register = async (req, res) => {
-    //Validacion de datos
-    const result = checkUser(req.body)
-    //Los datos no coinciden
-    if(!result.success){
-        return res.status(400).json(new JsonR(400, false, 'register-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)))
-    }
-
     //Registro del usuario en la base de datos
     try {
+        //Validacion de datos
+        const result = checkUser(req.body)
+        //Los datos no coinciden
+        if(!result.success){
+            return res.status(400).json(new JsonR(400, false, 'register-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)))
+        }
+
         const newUser = await User.set(req.body);
         //En caso de que no exista el usuario
         if(!newUser.success){
@@ -75,26 +75,26 @@ export const register = async (req, res) => {
  * Method for change password with token
  */
 export const newpassword = async (req, res) => {
-    // Validación de datos
-    const result = checkChangePassword(req.body);
-    
-    // Los datos no coinciden
-    if (!result.success) {
-        return res.status(400).json(new JsonR(400, false, 'newpassword-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)));
-    }
-
-    // Verificar si se proporcionó un token
-    if (!req.body.token) {
-        return res.status(500).json(new JsonR(500, false, 'auth-controller-newpassword', 'Se requiere un token', {}));
-    }
-
-    // Variable para guardar los datos del token
-    let tokenData = {
-        id: "",
-        password: req.body.password
-    };
-
     try {
+        // Validación de datos
+        const result = checkChangePassword(req.body);
+        
+        // Los datos no coinciden
+        if (!result.success) {
+            return res.status(400).json(new JsonR(400, false, 'newpassword-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)));
+        }
+
+        // Verificar si se proporcionó un token
+        if (!req.body.token) {
+            return res.status(500).json(new JsonR(500, false, 'auth-controller-newpassword', 'Se requiere un token', {}));
+        }
+
+        // Variable para guardar los datos del token
+        let tokenData = {
+            id: "",
+            password: req.body.password
+        };
+
         await jwt.verify(req.body.token, SECRET_KEY_TOKEN, async(err, data) => {
             // El token es inválido
             if (err) {
@@ -124,16 +124,16 @@ export const newpassword = async (req, res) => {
  * Method for get a new password
  */
 export const lostpass = async (req, res) => {
-    //Validacion de datos
-    const result = checkUserRescue(req.body);
-
-    //Los datos no coinciden
-    if(!result.success){
-        return res.status(400).json(new JsonR(400, false, 'lastpassword-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)))
-    }
-
     //Registro de un Token para un nuevo password
     try {
+        //Validacion de datos
+        const result = checkUserRescue(req.body);
+
+        //Los datos no coinciden
+        if(!result.success){
+            return res.status(400).json(new JsonR(400, false, 'lastpassword-data-validation', 'Error con los datos enviados', JSON.parse(result.error.message)))
+        }
+
         const userData = await User.checkEmail(req.body);
         //En caso de que no exista el usuario
         if(!userData.success){

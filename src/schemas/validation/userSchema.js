@@ -1,71 +1,93 @@
 import { object, string } from 'zod'
 
-//ZOD - Register
+// ZOD - Registro
 const userValidation = object({
     name: string({
-        required_error: 'name is required'
-    }).min(5).max(25),
-
+        required_error: 'El nombre es requerido.',
+    }).min(1, {
+        message: 'El nombre debe tener al menos 1 caracter.',
+    }).max(30, {
+        message: 'El nombre no debe exceder los 30 caracteres.',
+    }).refine((value) => {
+        // Utiliza una expresión regular para validar que solo se permitan letras acentuadas, la letra ñ y números
+        return /^[A-Za-záéíóúÁÉÍÓÚñÑ0-9\s]+$/i.test(value);
+    }, {
+        message: 'El nombre solo debe contener letras, números y espacios.',
+    }),
 
     lastname: string({
-        required_error: 'lastname is required'
-    }).min(5).max(25),
-
+        required_error: 'El apellido es requerido.',
+    }).min(1, {
+        message: 'El apellido debe tener al menos 1 caracter.',
+    }).max(30, {
+        message: 'El apellido no debe exceder los 30 caracteres.',
+    }).refine((value) => {
+        // Utiliza una expresión regular para validar que solo se permitan letras acentuadas, la letra ñ y números
+        return /^[A-Za-záéíóúÁÉÍÓÚñÑ0-9\s]+$/i.test(value);
+    }, {
+        message: 'El apellido solo debe contener letras, números y espacios.',
+    }),
 
     email: string({
-        required_error: 'email is required'
+        required_error: 'El correo electrónico es requerido.',
     }).refine((value) => {
         // Utiliza una expresión regular para validar si el valor es una dirección de correo electrónico válida
         return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value);
     }, {
-        message: 'Invalid email address',
+        message: 'Dirección de correo electrónico inválida.',
     }),
 
-
     password: string({
-        required_error: 'password is required'
-    }).min(7)
-})
+        required_error: 'La contraseña es requerida.',
+    }).min(8, {
+        message: 'La contraseña debe tener al menos 8 caracteres.',
+    })
+});
 
 
-//ZOD - Login
+// ZOD - Inicio de sesión
 const userLoginValidation = object({
     email: string({
-        required_error: 'email is required'
+        required_error: 'El correo electrónico es requerido.'
     }).refine((value) => {
         // Utiliza una expresión regular para validar si el valor es una dirección de correo electrónico válida
         return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value);
     }, {
-        message: 'Invalid email address',
+        message: 'Dirección de correo electrónico inválida.',
     }),
 
-    
     password: string({
-        required_error: 'password is required'
+        required_error: 'La contraseña es requerida.',
+    }).refine((value) => {
+        // Verifica si la longitud de la contraseña es al menos 8 caracteres
+        return value.length >= 8;
+    }, {
+        message: 'La contraseña debe tener al menos 8 caracteres.',
     })
-})
+});
 
-//ZOD - Lost Password
+// ZOD - Recuperación de contraseña perdida
 const userLostPasswordValidation = object({
     email: string({
-        required_error: 'email is required'
+        required_error: 'El correo electrónico es requerido.'
     }).refine((value) => {
         // Utiliza una expresión regular para validar si el valor es una dirección de correo electrónico válida
         return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value);
     }, {
-        message: 'Invalid email address',
+        message: 'Dirección de correo electrónico inválida.',
     })
-})
+});
 
 //ZOD - Password
 const userPasswordValidation = object({
     token: string({
-        required_error: 'token is required'
+        required_error: "El token es requerido."
     }),
     password: string({
-        required_error: 'password is required'
+        required_error: "La contraseña es requerida.",
+        min: [8, "La contraseña debe tener al menos 8 caracteres."]
     })
-})
+});
 
 
 export function checkUser(obj){
