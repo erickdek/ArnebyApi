@@ -66,8 +66,7 @@ class fileModel {
             const result = await newMedia.save();
             return new JsonR(200, true, 'file-model-post', 'File upload successfully', result);
         } catch (err) {
-            console.error('Error:', err);
-            return new JsonR(500, false, 'app-model-check', 'Server error', {});
+            return new JsonR(500, false, 'file-model-post', 'Error Interno', {});
         }
     }
     

@@ -1,6 +1,5 @@
 import Event from '../schemas/db/eventSchema.js';
 import logger from '../services/logger.js';
-import crypto from 'node:crypto';
 import JsonR from '../models/jsonModel.js';
 
 class eventModel{
@@ -23,12 +22,13 @@ class eventModel{
      * @param {Image} featuredImage - Id de mongodb de la coleccion imagenes
      * @returns {Object} JsonR con todo el resultado final.
      */
-    static async set({title, slug, content, location, virtual, links, prices, organizer, startDate, endDate, featuredImage}){
+    static async set({title, slug, content, category, location, virtual, links, prices, organizer, startDate, endDate, featuredImage, promoted, levelPromoted, state}){
         try {
             const newEvent = new Event({
                 title: title,
                 slug: slug,
                 content: content,
+                category: category,
                 location: location,
                 virtual: virtual,
                 links: links,
@@ -37,13 +37,16 @@ class eventModel{
                 startDate: startDate,
                 endDate: endDate,
                 featuredImage: featuredImage,
+                promoted: promoted,
+                levelPromoted: levelPromoted,
+                state: state,
             })
 
             const saveEvnt = await newEvent.save();
-            return new JsonR(200,true,'app-model-set','Event create successfully', saveEvnt);
+            return new JsonR(200,true,'event-model-set','Event create successfully', saveEvnt);
         } catch (err) {
-            console.error('Error:', err);
-            throw err; // Lanzar el error para que sea manejado por el código que llama a esta función
+            console.error(err);
+            return new JsonR(500, false, 'event-model-set', 'Error Interno', {});
         }
     }
 
@@ -71,38 +74,7 @@ class eventModel{
 
             return new JsonR(200, true, 'event-model-addOneLink', 'Event add link successfully', saveEvnt);
         } catch (err) {
-            console.error('Error:', err);
-            throw err; // Lanzar el error para que sea manejado por el código que llama a esta función
-        }
-    }
-
-    /**
-     *  Add One link to the event.
-     * @param {ObjectId} eventId - Id del evento
-     * @param {String} linkTitle - event link title: whatsapp, meetup, facebook group.
-     * @param {String} linkURL - event link url: https://example.com.
-    * @returns {Object} JsonR with the data/errors.
-    */
-    static async addOneLink({eventId, linkTitle, linkURL}){
-        try {
-            //Get the event by the _id
-            const EventFind = await Event.findById(eventId);
-
-            //Check if the event exists
-            if (!EventFind) {
-                return new JsonR(404, false, 'event-model-addOneLink', 'Event not found', {});
-            }
-
-            // Add a new link in the event
-            EventFind.links.push({ title: linkTitle, url: linkURL });
-
-            // Save the event in the database
-            const saveEvnt = await EventFind.save();
-
-            return new JsonR(200, true, 'event-model-addOneLink', 'Event add link successfully', saveEvnt);
-        } catch (err) {
-            console.error('Error:', err);
-            throw err; // Lanzar el error para que sea manejado por el código que llama a esta función
+            return new JsonR(500, false, 'event-model-addOneLink', 'Error Interno', {});
         }
     }
 
@@ -130,8 +102,7 @@ class eventModel{
     
         return new JsonR(200, true, 'event-model-addLinks', 'Event add links successfully', saveEvent);
         } catch (err) {
-            console.error('Error:', err);
-            throw err; // Lanzar el error para que sea manejado por el código que llama a esta función
+            return new JsonR(500, false, 'event-model-addLinks', 'Error Interno', {});
         }
     }
 
@@ -143,23 +114,23 @@ class eventModel{
      */
     static async replaceLinks({ eventId, links }) {
         try {
-        // Obtiene el evento por el _id
-        const event = await Event.findById(eventId);
-    
-        // Verifica si el evento existe
-        if (!event) {
-            return new JsonR(404, false, 'event-model-replaceLinks', 'Event not found', {});
-        }
-    
-        // Reemplaza los enlaces existentes con los nuevos enlaces
-        event.links = links;
-    
-        // Guarda el evento actualizado en la base de datos
-        const saveEvent = await event.save();
-    
-        return new JsonR(200, true, 'event-model-replaceLinks', 'Event links replaced successfully', saveEvent);
+            // Obtiene el evento por el _id
+            const event = await Event.findById(eventId);
+        
+            // Verifica si el evento existe
+            if (!event) {
+                return new JsonR(404, false, 'event-model-replaceLinks', 'Event not found', {});
+            }
+        
+            // Reemplaza los enlaces existentes con los nuevos enlaces
+            event.links = links;
+        
+            // Guarda el evento actualizado en la base de datos
+            const saveEvent = await event.save();
+        
+            return new JsonR(200, true, 'event-model-replaceLinks', 'Event links replaced successfully', saveEvent);
         } catch (err) {
-        return new JsonR(500, false, 'app-model-set', 'Server error', {});
+            return new JsonR(500, false, 'event-model-replaceLinks', 'Error Interno', {});
         }
     }
 
@@ -193,6 +164,19 @@ class eventModel{
             const events = await Event.find()
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
+                .populate({
+                    path: 'featuredImage',
+                    select: '-author'
+                })
+                .populate({
+                    path: 'category',
+                    select: '-createdAt -updatedAt -__v'
+                })
+                .populate({
+                    path: 'organizer',
+                    select: '-_id -role -createdAt -updatedAt -email -password -favoriteEvents -country -updatedAt -__v'
+                })
+                .select('-content')
                 .exec();
         
             const totalEvents = await Event.countDocuments();

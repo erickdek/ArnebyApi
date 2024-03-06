@@ -32,6 +32,10 @@ const eventSchema = new mongoose.Schema({
     startDate: { type: Number, required: true },
     endDate: { type: Number, required: true },
     featuredImage: { type: mongoose.Schema.Types.ObjectId, ref: 'Media' },
+    views: { type: Number, default: 0 },
+    promoted: { type: Number }, // Nuevo campo para el timestamp
+    levelPromoted: { type: Number },
+    state: { type: String, enum: ['publish', 'trash', 'pending', 'private', 'draft'], default: 'draft' },
 }, {
     timestamps: true
 })

@@ -76,7 +76,7 @@ class UserModel{
             // Devolver una respuesta exitosa
             return new JsonR(200, true, 'user-model-newPass', 'Contraseña actualizada exitosamente', {});
         } catch (error) {
-            return new JsonR(500, false, 'user-model-newPass', 'Error interno del servidor', {});
+            return new JsonR(500, false, 'user-model-newPass', 'Error interno', {});
         }
     }
 

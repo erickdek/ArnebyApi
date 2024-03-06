@@ -23,8 +23,7 @@ class CategoryModel{
             // Devolvemos los datos
             return new JsonR(200, true, 'category-model-post', 'Se publicó la categoría', result);
         } catch (error) {
-            console.error('Error:', error);
-            throw error; // Lanzar el error para que sea manejado por el código que llama a esta función
+            return new JsonR(500, false, 'category-model-post', 'Error en la consulta', {});
         }
     }
 
@@ -53,8 +52,7 @@ class CategoryModel{
             // Devolver el resultado de la actualización
             return new JsonR(200, true, 'category-model-update', 'Categoría actualizada con éxito', result);
         } catch (error) {
-            console.error('Error:', error);
-            throw error; // Lanzar el error para que sea manejado por el código que llama a esta función
+            return new JsonR(500, false, 'category-model-update', 'Error en la consulta', {});
         }
     }
 
@@ -68,8 +66,7 @@ class CategoryModel{
             // Devolvemos los datos
             return new JsonR(200, true, 'category-model-get', 'Se obtuvieron las categorías', result);
         } catch (error) {
-            console.error('Error:', error);
-            throw error; // Lanzar el error para que sea manejado por el código que llama a esta función
+            return new JsonR(500, false, 'category-model-Get', 'Error en la consulta', {});
         }
     }
 
@@ -89,8 +86,7 @@ class CategoryModel{
                 return new JsonR(404, false, 'category-model-getbyslug', 'No se encontró la categoría con el slug proporcionado', null);
             }
         } catch (error) {
-            console.error('Error:', error);
-            throw error; // Lanzar el error para que sea manejado por el código que llama a esta función
+            return new JsonR(500, false, 'category-model-GetSlug', 'Error en la consulta', {});
         }
     }
 
@@ -106,8 +102,7 @@ class CategoryModel{
             // Devolvemos los datos
             return new JsonR(200, true, 'category-model-get-by-name', 'Se obtuvieron las categorías por nombre', result);
         } catch (error) {
-            console.error('Error:', error);
-            throw error; // Lanzar el error para que sea manejado por el código que llama a esta función
+            return new JsonR(500, false, 'category-model-GetName', 'Error en la consulta', {});
         }
     }
 
@@ -119,12 +114,9 @@ class CategoryModel{
     static async getById({ id }) {
         try {
             const result = await CategoryDB.findById(id);
-
-            // Devolvemos los datos
-            return new JsonR(200, true, 'category-model-get-by-id', 'Se obtuvo la categoría por ID', result);
+            return new JsonR(200, true, 'category-model-GetId', 'Se obtuvo la categoría por ID', result);
         } catch (error) {
-            console.error('Error:', error);
-            throw error; // Lanzar el error para que sea manejado por el código que llama a esta función
+            return new JsonR(500, false, 'category-model-GetId', 'Error en la consulta', {});
         }
     }
 
@@ -140,8 +132,7 @@ class CategoryModel{
             // Devolvemos los datos
             return new JsonR(200, true, 'category-model-delete', 'Se eliminó la categoría', result);
         } catch (error) {
-            console.error('Error:', error);
-            throw error; // Lanzar el error para que sea manejado por el código que llama a esta función
+            return new JsonR(500, false, 'category-model-delete', 'Error en la consulta', {});
         }
     }
 

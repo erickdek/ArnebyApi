@@ -10,7 +10,6 @@ async function getLocation({ latitud, longitud }) {
         
         return { country, province };
     } catch (error) {
-        console.error('Error al obtener la ubicación:', error);
         throw error;
     }
 }

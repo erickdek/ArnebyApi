@@ -10,7 +10,7 @@ EventRoute
     //Eventos
     .get('/', GetEvents)
     .get('/:idApp', )
-    .post('/', setEvent)
+    .post('/', authRequired, setEvent)
     .delete('/:idApp', authRequired)
     .put('/:idApp', )
 
