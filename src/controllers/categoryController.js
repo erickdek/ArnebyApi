@@ -7,9 +7,11 @@ import JsonR from '../models/jsonModel.js';
 export const getAllCategory = async (req, res) => {
     try {
         const result = await Category.get();
+        console.log(result);
         return res.status(result.status).json(result);
 
     } catch (err) {
+        console.error(err);
         logger.error(err.message);
         return res.status(500).json(new JsonR(500, false, 'category-controller-getallcategory', 'Error interno del servidor', {}));
     }

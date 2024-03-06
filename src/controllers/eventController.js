@@ -21,7 +21,24 @@ export const GetEvents = async (req, res) => {
 
 //Obtener un evento por ID
 export const GetEventId = async (req, res) => {
-    return res.status(404).json(new JsonR(404, false, 'event-controller-geteventid', 'Event not found', {}));
+    try {
+        const result = await Event.getById({ id: req.params.id });
+        return res.status(result.status).json(result);
+    } catch (err) {
+        logger.error(err.message);
+        return res.status(500).json(new JsonR(500, false, 'event-controller-geteventid', 'Server error', {}));
+    }
+};
+
+//Obtener un evento por Slug
+export const GetEventSlug = async (req, res) => {
+    try {
+        const result = await Event.getBySlug({ slug: req.params.slug });
+        return res.status(result.status).json(result);
+    } catch (err) {
+        logger.error(err.message);
+        return res.status(500).json(new JsonR(500, false, 'event-controller-geteventslug', 'Server error', {}));
+    }
 };
 
 export const setEvent = async (req, res) => {

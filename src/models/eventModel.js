@@ -135,18 +135,68 @@ class eventModel{
     }
 
     /**
-     * Get a event with the ID.
-     * @param {ObjectId} eventId - eventid
-    * @returns {Object} JsonR with the data/errors.
-    */
-    static async get({ eventid }){
+     * Get an event by its ID.
+     * @param {string} id - The ID of the event.
+     * @returns {Object} JsonR with the data/errors.
+     */
+    static async getById({ id } ) {
         try {
-            const EventFind = await Event.findById(eventid);
-            if(!EventFind) return new JsonR(404, false, 'app-model-get', 'App not found', {});
-    
-            return new JsonR(200,true,'app-model-get','App found successfully', EventFind);
+            const event = await Event.findById(id)
+                .populate({
+                    path: 'featuredImage',
+                    select: '-author'
+                })
+                .populate({
+                    path: 'category',
+                    select: '-createdAt -updatedAt -__v'
+                })
+                .populate({
+                    path: 'organizer',
+                    select: '-_id -role -createdAt -updatedAt -email -password -favoriteEvents -country -updatedAt -__v'
+                })
+                .exec();
+
+            if (!event) {
+                return new JsonR(404, false, 'event-model-getById', 'Event not found', {});
+            }
+
+            return new JsonR(200, true, 'event-model-getById', 'Event found successfully', event);
         } catch (err) {
-            return new JsonR(500, false, 'app-model-set', 'Server error', {});
+            logger.error(err);
+            return new JsonR(500, false, 'event-model-getById', 'Server error', {});
+        }
+    }
+
+    /**
+     * Get an event by its slug.
+     * @param {string} slug - The slug of the event.
+     * @returns {Object} JsonR with the data/errors.
+     */
+    static async getBySlug({ slug }) {
+        try {
+            const event = await Event.findOne({ slug: slug })
+                .populate({
+                    path: 'featuredImage',
+                    select: '-author'
+                })
+                .populate({
+                    path: 'category',
+                    select: '-createdAt -updatedAt -__v'
+                })
+                .populate({
+                    path: 'organizer',
+                    select: '-_id -role -createdAt -updatedAt -email -password -favoriteEvents -country -updatedAt -__v'
+                })
+                .exec();
+
+            if (!event) {
+                return new JsonR(404, false, 'app-model-getBySlug', 'Event not found', {});
+            }
+
+            return new JsonR(200, true, 'app-model-getBySlug', 'Event found successfully', event);
+        } catch (err) {
+            logger.error(err);
+            return new JsonR(500, false, 'app-model-getBySlug', 'Server error', {});
         }
     }
 
