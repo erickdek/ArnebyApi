@@ -78,6 +78,7 @@ export const newpassword = async (req, res) => {
     try {
         // Validación de datos
         const result = checkChangePassword(req.body);
+        console.log(result);
         
         // Los datos no coinciden
         if (!result.success) {

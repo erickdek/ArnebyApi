@@ -78,16 +78,21 @@ const userLostPasswordValidation = object({
     })
 });
 
-//ZOD - Password
+// ZOD - Password
 const userPasswordValidation = object({
     token: string({
         required_error: "El token es requerido."
     }),
     password: string({
-        required_error: "La contraseña es requerida.",
-        min: [8, "La contraseña debe tener al menos 8 caracteres."]
+        required_error: 'La contraseña es requerida.',
+    }).refine((value) => {
+        // Verifica si la longitud de la contraseña es al menos 8 caracteres
+        return value.length >= 8;
+    }, {
+        message: 'La contraseña debe tener al menos 8 caracteres.',
     })
 });
+
 
 
 export function checkUser(obj){
